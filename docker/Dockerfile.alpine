@@ -36,4 +36,4 @@ COPY --chown=${UNAME}:${GNAME} apis.json .
 EXPOSE 8080
 
 ENTRYPOINT ["./runner.sh"]
-CMD ["--data", "apis.json", "--index", "0"]
+CMD ["start", "--data", "apis.json", "--index", "0"]

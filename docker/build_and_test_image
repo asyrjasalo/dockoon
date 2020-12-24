@@ -16,7 +16,7 @@ repo_root_path="$(cd "$this_path/.." && pwd)"
 : "${IMAGE_NAME:=${BUILD_DIR##*/}}"
 : "${IMAGE_TAG:="$IMAGE_KIND"}"
 
-: "${RUN_CMD:=""}"
+: "${RUN_CMD:="--version"}"
 
 ### build ######################################################################
 
