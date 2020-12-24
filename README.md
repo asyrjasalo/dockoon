@@ -1,11 +1,10 @@
 # dockoon
 
-Includes:
+The Docker images include:
 
-- Alpine Linux / Debian (slim)
-- Node.js 14
-- [mockoon-cli](https://github.com/mockoon/cli)
-- [proxy to jsonplaceholder](https://jsonplaceholder.typicode.com/) at [:8080](https://localhost:8080)
+- Node.js 14 on Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`)
+- Latest [@mockoon/cli](https://www.npmjs.com/package/@mockoon/cli)
+- [Proxy to jsonplaceholder](https://jsonplaceholder.typicode.com/) defaulted at [:8080](https://localhost:8080)
 
 ## Setup
 
@@ -15,20 +14,23 @@ Install [mockoon](https://mockoon.com/) to edit 'apis.json' via GUI. On OS X:
 
 ## Run mockoon-cli on Docker
 
-Build a new image based on `Dockerfile` and run it:
+Build a new (Alpine based) image from `Dockerfile` and run it locally:
 
     ./dockoon
 
-Append any `mockoon` CLI arguments:
+Pass `mockoon` CLI arguments, e.g. to override the default port:
 
-    ./dockoon list
+    ./dockoon start --data apis.json --name jsonplaceholder --port 3000
 
 Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
     BUILD_ARGS="--build-arg FROM_IMAGE=asyrjasalo/mockoon:slimbuster" \
       ./dockoon
 
-Pass variable `RUN_ARGS` to include additional `docker run` arguments.
+Pass variable `RUN_ARGS` to include additional `docker run` arguments:
+
+    RUN_ARGS="-v $PWD/imposter.json:/home/app/imposter.json -p 4000:4000" \
+      ./dockoon start --data imposter.json --name myfakeapi --port 4000
 
 ## Build a base image
 
