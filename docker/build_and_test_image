@@ -13,7 +13,7 @@ repo_root_path="$(cd "$this_path/.." && pwd)"
 : "${BUILD_DIR:="$repo_root_path"}"
 
 : "${IMAGE_KIND:="alpine"}"
-: "${IMAGE_NAME:=${BUILD_DIR##*/}}"
+: "${IMAGE_NAME:="mockoon"}"
 : "${IMAGE_TAG:="$IMAGE_KIND"}"
 
 : "${RUN_CMD:="--version"}"
