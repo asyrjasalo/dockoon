@@ -1,0 +1,41 @@
+ARG NODE_VERSION=14
+FROM node:${NODE_VERSION}-buster-slim
+
+ARG ADD_DEB_PACKAGES="bash"
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends ${ADD_DEB_PACKAGES} && \
+    rm -rf /var/lib/apt/lists/*
+
+ARG TZ="Europe/Helsinki"
+RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
+    echo ${TZ} > /etc/timezone
+
+ARG UNAME="app"
+ARG GNAME="app"
+ARG UHOME="/home/app"
+ARG SHELL="/bin/bash"
+
+RUN addgroup --system \
+    ${GNAME}
+
+RUN adduser --system \
+    --ingroup ${GNAME} \
+    --disabled-password \
+    --home ${UHOME} \
+    --shell ${SHELL} \
+    ${UNAME}
+
+USER ${UNAME}
+WORKDIR ${UHOME}
+
+ARG ADD_NPM_PACKAGES="@mockoon/cli"
+RUN npm install ${ADD_NPM_PACKAGES} --production --no-save
+
+COPY --chown=${UNAME}:${GNAME} docker/runner.sh runner.sh
+RUN chmod +x runner.sh
+
+COPY --chown=${UNAME}:${GNAME} apis.json .
+EXPOSE 8080
+
+ENTRYPOINT ["./runner.sh"]
+CMD ["--data", "apis.json", "--index", "0"]

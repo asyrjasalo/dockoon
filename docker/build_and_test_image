@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -e
+
+### constants ##################################################################
+
+this_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root_path="$(cd "$this_path/.." && pwd)"
+
+### variables ##################################################################
+
+: "${BUILD_ARGS:=""}"
+: "${BUILD_DIR:="$repo_root_path"}"
+
+: "${IMAGE_KIND:="alpine"}"
+: "${IMAGE_NAME:=${BUILD_DIR##*/}}"
+: "${IMAGE_TAG:="$IMAGE_KIND"}"
+
+: "${RUN_CMD:=""}"
+
+### build ######################################################################
+
+docker build \
+  --file "$this_path/Dockerfile.$IMAGE_KIND" \
+  --pull \
+  --no-cache \
+  $BUILD_ARGS \
+  --tag "$IMAGE_NAME:$IMAGE_TAG" \
+  "$BUILD_DIR"
+
+### run ########################################################################
+
+BUILD_ARGS="--build-arg FROM_IMAGE=$IMAGE_NAME:$IMAGE_TAG" \
+  "$repo_root_path/dockoon" $RUN_CMD

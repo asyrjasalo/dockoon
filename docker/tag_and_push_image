@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -e
+
+### constants ##################################################################
+
+this_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root_path="$(cd "$this_path/.." && pwd)"
+
+### variables ##################################################################
+
+: "${IMAGE_KIND:="alpine"}"
+: "${IMAGE_NAME:=${repo_root_path##*/}}"
+: "${IMAGE_TAG:="$IMAGE_KIND"}"
+
+# most registries require image name downcased, make it so
+IMAGE_NAME="$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')"
+
+: "${REGISTRY_URL:=""}"
+: "${REGISTRY_IMAGE_REF:="${REGISTRY_URL}/${IMAGE_NAME}"}"
+: "${REGISTRY_IMAGE_TAG:="$IMAGE_KIND-$(date +%y.%m.%d.%H%M)"}"
+
+### tag and push ###############################################################
+
+docker tag "$IMAGE_NAME:$IMAGE_TAG" "$REGISTRY_IMAGE_REF:$REGISTRY_IMAGE_TAG"
+docker push "$REGISTRY_IMAGE_REF:$REGISTRY_IMAGE_TAG"
+
+docker tag "$IMAGE_NAME:$IMAGE_TAG" "$REGISTRY_IMAGE_REF:$IMAGE_KIND"
+docker push "$REGISTRY_IMAGE_REF:$IMAGE_KIND"

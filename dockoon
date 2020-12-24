@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -e
+
+### constants ##################################################################
+
+this_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+### variables ##################################################################
+
+: "${BUILD_ARGS:=""}"
+: "${BUILD_DIR:="$this_path"}"
+: "${BUILD_NAME:="$(date -u +%Y.%m.%d.post%H%M%S.dev"$(id -u)")"}"
+: "${IMAGE_NAME:="${this_path##*/}"}"
+: "${RUN_ARGS:="-p 8080:8080"}"
+
+### build and run ##############################################################
+
+docker build $BUILD_ARGS --tag "$IMAGE_NAME:$BUILD_NAME" "$BUILD_DIR"
+
+docker run --rm \
+  --user app \
+  --cap-drop ALL \
+  -it $RUN_ARGS \
+  "$IMAGE_NAME:$BUILD_NAME" "$@"

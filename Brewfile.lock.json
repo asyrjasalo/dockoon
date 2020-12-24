@@ -1,0 +1,24 @@
+{
+  "entries": {
+    "cask": {
+      "mockoon": {
+        "version": "1.11.0",
+        "options": {
+          "full_name": "mockoon"
+        }
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "catalina": {
+        "HOMEBREW_VERSION": "2.7.0-70-gd89a2c1",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "2f0651c685c6f4b3a018c75f03cd83bdbbc2806c",
+        "CLT": "12.0.32.21",
+        "Xcode": "12.0",
+        "macOS": "10.15.7"
+      }
+    }
+  }
+}
