@@ -2,9 +2,9 @@
 
 The Docker images include:
 
-- Node.js 14 on Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`)
+- Node.js 14, on Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`)
 - Latest [@mockoon/cli](https://www.npmjs.com/package/@mockoon/cli)
-- [Proxy to jsonplaceholder](https://jsonplaceholder.typicode.com/) defaulted at [:8080](https://localhost:8080)
+- Proxy to [jsonplaceholder](https://jsonplaceholder.typicode.com/), defaulted at [:8080](https://localhost:8080)
 
 ## Setup
 
@@ -12,7 +12,7 @@ Install [mockoon](https://mockoon.com/) to edit 'apis.json' via GUI. On OS X:
 
     brew bundle
 
-## Run mockoon-cli on Docker
+## Run mockoon-cli in Docker
 
 Build a new (Alpine based) image from `Dockerfile` and run it locally:
 
@@ -40,25 +40,26 @@ Alpine Linux:
 
 Debian Buster (slim):
 
-    IMAGE_KIND="slimbuster" docker/build_and_test_image
+    IMAGE_KIND=slimbuster \
+      docker/build_and_test_image
 
-Pass variable `BUILD_DIR` to override the directory path where `Dockerfile` is.
+Pass variable `BUILD_DIR` to override the path to dir where `Dockerfile` is.
 
 ## Push the base image
 
-Remember to `docker login` first.
+Run `docker login` before the scripts.
 
-Push the image to the private Docker registry:
+Push the image to your private Docker registry:
 
     REGISTRY_URL=https://your.azurecr.io \
       docker/tag_and_push_image
 
-Tag and push the image as 'alpine' to [Docker Hub](https://hub.docker.com):
+Tag and push the image `mockoon:alpine` to [Docker Hub](https://hub.docker.com):
 
     REGISTRY_URL="$USER" \
       docker/tag_and_push_image
 
-Tag and push the image as 'slimbuster' (note: build on Debian image first):
+Tag and push the image `mockoon:slimbuster` (note: first, build a Debian image):
 
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
