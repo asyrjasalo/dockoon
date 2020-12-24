@@ -9,7 +9,7 @@ Includes:
 
 ## Setup
 
-Install [mockoon](https://mockoon.com/) to edit `apis.json` graphically. OS X:
+Install [mockoon](https://mockoon.com/) to edit 'apis.json' via GUI. On OS X:
 
     brew bundle
 
@@ -17,16 +17,16 @@ Install [mockoon](https://mockoon.com/) to edit `apis.json` graphically. OS X:
 
 Build a new image based on `Dockerfile` and run it:
 
-    ./mockoon
+    ./dockoon
 
-Append any `mockoon` command-line parameters:
+Append any `mockoon` CLI arguments:
 
-    ./mockoon --version
+    ./dockoon list
 
 Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
     BUILD_ARGS="--build-arg FROM_IMAGE=asyrjasalo/mockoon:slimbuster" \
-      ./mockoon
+      ./dockoon
 
 Pass variable `RUN_ARGS` to include additional `docker run` arguments.
 
