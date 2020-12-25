@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-
-trap "echo -e '\nCaught ^C from user - exiting now' ; exit 0" SIGINT
+#!/bin/sh
 
 node_modules/.bin/mockoon "$@"
-[ "$1" = "start" ] && (sleep infinity & wait $!)
+
+[ "$1" = "start" ] && tail -f ~/.mockoon-cli/logs/*.log | while read -r
+do
+    echo "$(date +%H:%M:%S) $REPLY"
+done

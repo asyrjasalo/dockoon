@@ -1,17 +1,17 @@
 ARG NODE_VERSION=14
 FROM node:${NODE_VERSION}-alpine
 
-ARG ADD_APK_PACKAGES="bash"
-RUN apk --no-cache --update add tzdata ${ADD_APK_PACKAGES}
+ARG ADD_APK_PACKAGES="tzdata"
+RUN apk --no-cache --update add ${ADD_APK_PACKAGES}
 
 ARG TZ="Europe/Helsinki"
 RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
-    echo ${TZ} > /etc/timezone
+    echo ${TZ} > /etc/timezone || true
 
 ARG UNAME="app"
 ARG GNAME="app"
 ARG UHOME="/home/app"
-ARG SHELL="/bin/bash"
+ARG SHELL="/bin/sh"
 
 RUN addgroup --system \
     ${GNAME}
