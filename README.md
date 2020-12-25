@@ -38,12 +38,14 @@ Alpine Linux:
 
     docker/build_and_test_image
 
-Debian Buster (slim):
+Pass variable `BUILD_ARGS` to override the default `docker build` arguments.
+
+Pass `IMAGE_KIND` to build on non-Alpine Dockerfile. For Debian Buster (slim):
 
     IMAGE_KIND=slimbuster \
       docker/build_and_test_image
 
-Pass variable `BUILD_DIR` to override the path to dir where `Dockerfile` is.
+Pass `BUILD_DIR` to override the dir path where `Dockerfile.IMAGE_KIND` is in.
 
 ## Push the base image
 

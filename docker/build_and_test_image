@@ -9,7 +9,7 @@ repo_root_path="$(cd "$this_path/.." && pwd)"
 
 ### variables ##################################################################
 
-: "${BUILD_ARGS:=""}"
+: "${BUILD_ARGS:="--pull --no-cache"}"
 : "${BUILD_DIR:="$repo_root_path"}"
 
 : "${IMAGE_KIND:="alpine"}"
@@ -22,8 +22,6 @@ repo_root_path="$(cd "$this_path/.." && pwd)"
 
 docker build \
   --file "$this_path/Dockerfile.$IMAGE_KIND" \
-  --pull \
-  --no-cache \
   $BUILD_ARGS \
   --tag "$IMAGE_NAME:$IMAGE_TAG" \
   "$BUILD_DIR"
