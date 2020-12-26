@@ -9,32 +9,17 @@ ARG TZ="Europe/Helsinki"
 RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
     echo ${TZ} > /etc/timezone || true
 
-ARG UNAME="app"
-ARG GNAME="app"
-ARG UHOME="/home/app"
-ARG SHELL="/bin/sh"
-
-RUN addgroup --system \
-    ${GNAME}
-
-RUN adduser --system \
-    --ingroup ${GNAME} \
-    --disabled-password \
-    --home ${UHOME} \
-    --shell ${SHELL} \
-    ${UNAME}
-
-USER ${UNAME}
-WORKDIR ${UHOME}
+USER node
+WORKDIR /home/node
 
 ARG ADD_NPM_PACKAGES="@mockoon/cli"
 RUN npm install ${ADD_NPM_PACKAGES} --production --no-save
 
-COPY --chown=${UNAME}:${GNAME} docker/runner.sh runner.sh
-RUN chmod +x runner.sh
+COPY --chown=node:node docker/runner.sh runner.sh
+ENTRYPOINT ["sh", "runner.sh"]
 
-COPY --chown=${UNAME}:${GNAME} apis.json .
+HEALTHCHECK --interval=5s --retries=3 CMD nc -z localhost 8080
 EXPOSE 8080
 
-ENTRYPOINT ["./runner.sh"]
+COPY --chown=node:node apis.json .
 CMD ["start", "--data", "apis.json", "--index", "0"]

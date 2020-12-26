@@ -19,7 +19,7 @@ this_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 docker build $BUILD_ARGS --tag "$IMAGE_NAME:$BUILD_NAME" "$BUILD_DIR"
 
 docker run --rm \
-  --user app \
+  --user node \
   --cap-drop ALL \
   -it $RUN_ARGS \
   "$IMAGE_NAME:$BUILD_NAME" "$@"
