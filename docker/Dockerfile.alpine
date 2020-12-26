@@ -17,9 +17,3 @@ RUN npm install ${ADD_NPM_PACKAGES} --production --no-save
 
 COPY --chown=node:node docker/runner.sh runner.sh
 ENTRYPOINT ["sh", "runner.sh"]
-
-HEALTHCHECK --interval=5s --retries=3 CMD nc -z localhost 8080
-EXPOSE 8080
-
-COPY --chown=node:node apis.json .
-CMD ["start", "--data", "apis.json", "--index", "0"]

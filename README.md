@@ -1,26 +1,27 @@
 # dockoon
 
-The Docker images include:
+[The Docker images](https://hub.docker.com/repository/docker/asyrjasalo/mockoon) include:
 
-- Node.js 14, on Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`)
+- Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`) base
+- Node.js 14 running as non-root user
 - Latest [@mockoon/cli](https://www.npmjs.com/package/@mockoon/cli)
-- Proxy to [jsonplaceholder](https://jsonplaceholder.typicode.com/), defaulted at [:8080](https://localhost:8080)
 
 ## Setup
 
-Install [mockoon](https://mockoon.com/) to edit 'apis.json' via GUI. On OS X:
+Install [mockoon](https://mockoon.com/) to edit `apis.json` via GUI. On OS X:
 
     brew bundle
 
-## Run mockoon-cli in Docker
+## Running locally
 
-Build a new (Alpine based) image from `Dockerfile` and run it locally:
+Build and run proxy to [jsonplaceholder](https://jsonplaceholder.typicode.com/)
+at [:8080](https://localhost:8080) from `Dockerfile`:
 
     ./dockoon
 
-Pass `mockoon` CLI arguments, e.g. to override the default port:
+Any `mockoon` CLI arguments are accepted:
 
-    ./dockoon start --data apis.json --name jsonplaceholder --port 3000
+    ./dockoon start --data https://file-server/apis.json --index 0 --port 8080
 
 Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
@@ -29,8 +30,8 @@ Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
 Pass variable `RUN_ARGS` to include additional `docker run` arguments:
 
-    RUN_ARGS="-v $PWD/imposter.json:/home/app/imposter.json -p 4000:4000" \
-      ./dockoon start --data imposter.json --name myfakeapi --port 4000
+    RUN_ARGS="-p 4000:4000" \
+      ./dockoon start --data apis.json --name jsonplaceholder --port 4000
 
 ## Build a base image
 
@@ -66,3 +67,7 @@ Tag and push the image `mockoon:slimbuster` (note: first, build a Debian image):
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
       docker/tag_and_push_image
+
+## Cloud deployment
+
+See `terraform/README.md` for running on Azure Container Instances.

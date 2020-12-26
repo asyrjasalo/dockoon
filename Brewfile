@@ -1,4 +1,3 @@
-# Run `brew bundle` to install Mac OS X dependencies (via Homebrew)
+# Run `brew bundle` on OS X, see https://mockoon.com/#download for other OSes
 
-# Mockoon
 cask "mockoon"
