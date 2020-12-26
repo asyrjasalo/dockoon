@@ -2,3 +2,4 @@
 
 brew 'azure-cli'
 brew 'tfenv'
+brew 'shihanng/tfvar/tfvar'

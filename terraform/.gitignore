@@ -8,9 +8,13 @@
 *.tfstate
 *.tfstate.*
 
-# plan files
+# terraform plan outputs
 *.tfplan
 
-# secrets
-terraform/secrets
-!terraform/secrets/.gitkeep
+# tfvars
+environments/
+!environments/.gitkeep
+
+# module secrets if any
+secrets/
+!secrets/.gitkeep

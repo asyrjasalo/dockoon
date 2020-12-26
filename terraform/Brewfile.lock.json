@@ -25,7 +25,8 @@
       "tfenv": {
         "version": "2.0.0",
         "bottle": false
-      }
+      },
+      "shihanng/tfvar/tfvar": null
     }
   },
   "system": {

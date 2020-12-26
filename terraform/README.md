@@ -2,11 +2,17 @@
 
 ## Prerequisites
 
-Install [tfenv](https://github.com/tfutils/tfenv) and [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest):
+The following tools are used locally:
+
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+- [tfenv](https://github.com/tfutils/tfenv) to install required Terraform version
+- [tfvar](https://github.com/shihanng/tfvar) to generate new `environments/`
+ 
+To install them on OS X:
 
     brew bundle
 
-Use `tfenv` to install proper Terraform version according to `provider.tf`:
+Use `tfenv` to install proper Terraform version (according to `provider.tf`):
 
     tfenv install
 
@@ -16,28 +22,32 @@ Login to Azure:
 
 ## Create Terraform backend (only once)
 
-The infra resource group contains non-environment specific resorces:
+The "infra" resource group contains non-environment specific resources:
 
 - Storage account with a container for each environment
 - Key vault for storing the storage account key (and possibly other secrets)
 
-Put names for the infra resources in `config.sh` and run:
+Set names for the infra resources in `config.sh`, then run:
 
     backend/create_tf_backend.sh
 
-Configure variables in `backend/*.backend` files accordingly.
+Configure remote state resource names in `backend/*.backend` files accordingly.
 
 ## Create or upgrade environment
 
-Get `ARM_ACCESS_KEY` from the infra Key vault and export it for Azure provider:
+Get `ARM_ACCESS_KEY` from infra Key vault and export it for TF Azure provider:
 
     source get_arm_access_key.sh
 
-Install providers according to the lockfile and catch up with the remote state:
+Install providers according to TF lockfile and catch up with the remote state:
 
     terraform init -backend-config=backend/test.backend -reconfigure
 
-Validate and output changes for the environment:
+Create `environments/test.tfvars` from `variables.tf` and fill empty variables:
+
+    tfvar . > environments/test.tfvars
+
+Validate and output upcoming changes for the environment:
 
     terraform plan -var-file=environments/test.tfvars -out=test.tfplan
 
