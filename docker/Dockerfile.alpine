@@ -1,6 +1,7 @@
 ARG NODE_VERSION=14
 FROM node:${NODE_VERSION}-alpine
 
+# if no tzdata, will stick on UTC
 ARG ADD_APK_PACKAGES="tzdata"
 RUN apk --no-cache --update add ${ADD_APK_PACKAGES}
 
