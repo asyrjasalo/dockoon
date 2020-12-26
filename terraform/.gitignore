@@ -1,0 +1,16 @@
+# logs
+*.log
+
+# local caches
+.terraform/*
+
+# local states
+*.tfstate
+*.tfstate.*
+
+# plan files
+*.tfplan
+
+# secrets
+terraform/secrets
+!terraform/secrets/.gitkeep

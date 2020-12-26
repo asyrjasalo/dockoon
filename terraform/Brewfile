@@ -1,0 +1,4 @@
+# Run `brew bundle` to install
+
+brew 'azure-cli'
+brew 'tfenv'
