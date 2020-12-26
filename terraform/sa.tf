@@ -22,4 +22,8 @@ resource "azurerm_management_lock" "lock" {
   scope      = azurerm_storage_account.sa.id
   lock_level = "CanNotDelete"
   notes      = "Do not delete storage account"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
