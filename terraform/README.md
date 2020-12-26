@@ -1,4 +1,4 @@
-# Azure
+# Running on Azure Container Instances
 
 ## Prerequisites
 
