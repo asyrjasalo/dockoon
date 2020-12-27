@@ -54,3 +54,20 @@ Validate and output upcoming changes for the environment:
 Apply the actual changes in Azure:
 
     terraform apply "test.tfplan"
+
+## Command reference
+
+test:
+
+    terraform init -backend-config=backend/test.backend -reconfigure -upgrade
+    terraform apply -var-file=environments/test.tfvars -auto-approve
+
+stg:
+
+    terraform init -backend-config=backend/stg.backend -reconfigure -upgrade
+    terraform apply -var-file=environments/stg.tfvars -auto-approve
+
+prod:
+
+    terraform init -backend-config=backend/prod.backend -reconfigure -upgrade
+    terraform apply -var-file=environments/prod.tfvars -auto-approve

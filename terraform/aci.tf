@@ -50,13 +50,3 @@ resource "azurerm_container_group" "aci" {
 
   tags = local.tags
 }
-
-resource "null_resource" "log" {
-  triggers = {
-    always = timestamp()
-  }
-
-  provisioner "local-exec" {
-    command = "az container logs --ids ${azurerm_container_group.aci.id}"
-  }
-}
