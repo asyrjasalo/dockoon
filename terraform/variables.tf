@@ -1,3 +1,11 @@
+locals {
+  tags = {
+    "app"         = var.app
+    "contact"     = var.contact_email
+    "environment" = var.environment
+  }
+}
+
 # Scope
 
 variable "location" {

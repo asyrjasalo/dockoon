@@ -1,3 +1,7 @@
+locals {
+  aci_name = "${var.prefix}-${var.environment}-${var.app}-aci"
+}
+
 resource "azurerm_container_group" "aci" {
   name                = local.aci_name
   resource_group_name = azurerm_resource_group.rg.name

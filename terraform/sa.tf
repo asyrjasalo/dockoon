@@ -1,3 +1,7 @@
+locals {
+  sa_name  = "${var.prefix}${var.environment}${var.app}sa"
+}
+
 resource "azurerm_storage_account" "sa" {
   name                     = local.sa_name
   resource_group_name      = azurerm_resource_group.rg.name
