@@ -1,8 +1,8 @@
 locals {
   tags = {
     "app"         = var.app
-    "contact"     = var.contact_email
     "environment" = var.environment
+    "contact"     = var.contact_email
   }
 }
 
