@@ -1,5 +1,5 @@
 locals {
-  rg_name  = "${var.prefix}-${var.environment}-${var.app}-rg"
+  rg_name = "${var.prefix}-${var.environment}-${var.app}-rg"
 }
 
 resource "azurerm_resource_group" "rg" {

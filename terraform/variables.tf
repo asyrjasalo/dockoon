@@ -75,12 +75,12 @@ variable "memory_gbs" {
 }
 
 variable "ports" {
-  type = list(number)
+  type    = list(number)
   default = [8080]
 }
 
 variable "volumes" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
 

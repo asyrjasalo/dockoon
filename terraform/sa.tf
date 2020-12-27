@@ -1,5 +1,5 @@
 locals {
-  sa_name  = "${var.prefix}${var.environment}${var.app}sa"
+  sa_name = "${var.prefix}${var.environment}${var.app}sa"
 }
 
 resource "azurerm_storage_account" "sa" {

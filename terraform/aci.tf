@@ -29,7 +29,7 @@ resource "azurerm_container_group" "aci" {
       iterator = port
 
       content {
-        port = port.value
+        port     = port.value
         protocol = "TCP"
       }
     }

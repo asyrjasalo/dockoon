@@ -1,5 +1,7 @@
 terraform {
-  backend "azurerm" {}
+  backend "azurerm" {
+    key = "terraform.tfstate"
+  }
 
   required_providers {
     azurerm = "~> 2.40.0"
