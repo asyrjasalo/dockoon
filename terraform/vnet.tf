@@ -54,13 +54,8 @@ resource "azurerm_subnet" "private" {
       # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#name
       name = "Microsoft.ContainerInstance/containerGroups"
 
-      # pick below
       actions = [
-        "Microsoft.Network/networkinterfaces/*",
-        "Microsoft.Network/virtualNetworks/subnets/action",
-        "Microsoft.Network/virtualNetworks/subnets/join/action",
-        "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action",
-        "Microsoft.Network/virtualNetworks/subnets/unprepareNetworkPolicies/action"
+        "Microsoft.Network/virtualNetworks/subnets/action"
       ]
     }
   }
