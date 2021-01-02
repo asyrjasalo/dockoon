@@ -6,7 +6,7 @@ prefix   = "smth"
 # Tags
 
 app           = "dockoon"
-environment   = "production"
+environment   = "prod"
 contact_email = "yourmail@yourdomain.dev"
 
 # ACI
