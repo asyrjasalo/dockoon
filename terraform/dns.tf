@@ -10,11 +10,12 @@ resource "azurerm_dns_cname_record" "cname" {
   count = var.dns_zone_name != "" && var.vnet_address_space == null ? 1 : 0
 }
 
+# ACI in VNET has no fqdn but has a private IP address
 resource "azurerm_dns_a_record" "a" {
   name                = "${var.app}.${var.environment}"
   resource_group_name = var.dns_zone_rg_name
   zone_name           = var.dns_zone_name
-  ttl                 = 300 # seconds
+  ttl                 = 300
   records             = [azurerm_container_group.aci.ip_address]
 
   tags = local.tags
