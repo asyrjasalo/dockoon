@@ -103,3 +103,15 @@ variable "dns_zone_rg_name" {
   type    = string
   default = ""
 }
+
+# VNET
+
+variable "vnet_address_space" {
+  type = string
+  default = null
+}
+
+variable "vnet_dns_servers" {
+  type = list(string)
+  default = null
+}

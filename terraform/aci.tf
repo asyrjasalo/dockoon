@@ -1,5 +1,7 @@
 locals {
   aci_name = "${var.prefix}-${var.environment}-${var.app}-aci"
+  netp_name = "${var.prefix}-${var.environment}-${var.app}-netp"
+  nic_name = "${var.prefix}-${var.environment}-${var.app}-nic"
 }
 
 resource "azurerm_container_group" "aci" {
@@ -7,8 +9,10 @@ resource "azurerm_container_group" "aci" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
-  dns_name_label  = "${var.container_name}-${var.environment}"
-  ip_address_type = "Public"
+  dns_name_label  =  azurerm_network_profile.netp[0] == null ? "${var.container_name}-${var.environment}" : null
+
+  ip_address_type = azurerm_network_profile.netp[0] != null ? "Private" : "Public"
+  network_profile_id = azurerm_network_profile.netp[0] != null ? azurerm_network_profile.netp[0].id : null
 
   os_type        = "Linux"
   restart_policy = var.restart_policy
@@ -65,4 +69,23 @@ resource "azurerm_container_group" "aci" {
   }
 
   tags = local.tags
+}
+
+resource "azurerm_network_profile" "netp" {
+  name                = local.netp_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  container_network_interface {
+    name = local.nic_name
+
+    ip_configuration {
+      name = "private"
+      subnet_id = azurerm_subnet.private.id
+    }
+  }
+
+  tags = local.tags
+
+  count = var.vnet_address_space != null ? 1 : 0
 }
