@@ -40,7 +40,7 @@ resource "azurerm_container_group" "aci" {
       content {
         mount_path           = volume.value
         name                 = volume.key
-        read_only            = false
+        read_only            = true
         share_name           = volume.key
         storage_account_name = azurerm_storage_account.sa.name
         storage_account_key  = azurerm_storage_account.sa.primary_access_key
