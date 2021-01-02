@@ -41,6 +41,12 @@ resource "azurerm_subnet" "private" {
   virtual_network_name = azurerm_virtual_network.vnet[0].name
   address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 2)]
 
+  service_endpoints = [
+    "Microsoft.ContainerRegistry", # if using Azure Container Registry
+    "Microsoft.Storage",           # File Share
+    "Microsoft.Web"                # if calling AppService
+  ]
+
   delegation {
     name = "private"
 
