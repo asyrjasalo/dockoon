@@ -47,6 +47,8 @@ Create `environments/test.tfvars` from `variables.tf` and fill empty variables:
 
     tfvar . > environments/test.tfvars
 
+See `environments/*.example.tfvars` for examples to deploy in VNET or without.
+
 Validate and output upcoming changes for the environment:
 
     terraform plan -var-file=environments/test.tfvars -out=test.tfplan
@@ -54,6 +56,13 @@ Validate and output upcoming changes for the environment:
 Apply the actual changes in Azure:
 
     terraform apply "test.tfplan"
+
+## Container volume mount
+
+Upload `apis.json` to the environment's Storage Account's File Share `apis`
+to get the container running successfully.
+
+Alternatively, you can configure Docker start command in `environment/*.tfvars`.
 
 ## Command reference
 
