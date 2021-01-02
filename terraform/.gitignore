@@ -13,7 +13,6 @@
 
 # tfvars
 environments/
-!environments/.gitkeep
 !environments/*.example.tfvars
 
 # module secrets if any
