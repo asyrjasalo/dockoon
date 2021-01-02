@@ -84,6 +84,14 @@ variable "volumes" {
   default = {}
 }
 
+# LAW
+
+variable "law_sku" {
+  type = string
+  default = null
+  description = "e.g. PerGB2018"
+}
+
 # DNS
 
 variable "dns_zone_name" {

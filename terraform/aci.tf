@@ -48,5 +48,21 @@ resource "azurerm_container_group" "aci" {
     }
   }
 
+  dynamic "diagnostics" {
+    for_each = azurerm_log_analytics_workspace.law
+    iterator = law
+
+    content {
+      log_analytics {
+        # LAW query:
+        # ContainerEvent_CL | order by TimeGenerated desc
+        # ContainerInstanceLog_CL  | order by TimeGenerated desc
+        log_type = "ContainerInsights"
+        workspace_id = law.value != null ? law.value.workspace_id : null
+        workspace_key = law.value != null ? law.value.primary_shared_key : null
+      }
+    }
+  }
+
   tags = local.tags
 }
