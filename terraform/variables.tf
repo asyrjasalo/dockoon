@@ -87,8 +87,8 @@ variable "volumes" {
 # LAW
 
 variable "law_sku" {
-  type = string
-  default = null
+  type        = string
+  default     = null
   description = "e.g. PerGB2018"
 }
 
@@ -107,11 +107,11 @@ variable "dns_zone_rg_name" {
 # VNET
 
 variable "vnet_address_space" {
-  type = string
+  type    = string
   default = null
 }
 
 variable "vnet_dns_servers" {
-  type = list(string)
+  type    = list(string)
   default = null
 }

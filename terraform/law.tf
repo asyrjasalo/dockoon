@@ -7,11 +7,11 @@ resource "azurerm_log_analytics_workspace" "law" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
-  sku                 = var.law_sku
-  retention_in_days   = 30
+  sku               = var.law_sku
+  retention_in_days = 30
 
   internet_ingestion_enabled = false
-  internet_query_enabled = false
+  internet_query_enabled     = false
 
   tags = local.tags
 

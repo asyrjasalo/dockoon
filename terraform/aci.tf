@@ -1,7 +1,7 @@
 locals {
-  aci_name = "${var.prefix}-${var.environment}-${var.app}-aci"
+  aci_name  = "${var.prefix}-${var.environment}-${var.app}-aci"
   netp_name = "${var.prefix}-${var.environment}-${var.app}-netp"
-  nic_name = "${var.prefix}-${var.environment}-${var.app}-nic"
+  nic_name  = "${var.prefix}-${var.environment}-${var.app}-nic"
 }
 
 resource "azurerm_container_group" "aci" {
@@ -9,9 +9,9 @@ resource "azurerm_container_group" "aci" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
-  dns_name_label  =  azurerm_network_profile.netp[0] == null ? "${var.container_name}-${var.environment}" : null
+  dns_name_label = azurerm_network_profile.netp[0] == null ? "${var.container_name}-${var.environment}" : null
 
-  ip_address_type = azurerm_network_profile.netp[0] != null ? "Private" : "Public"
+  ip_address_type    = azurerm_network_profile.netp[0] != null ? "Private" : "Public"
   network_profile_id = azurerm_network_profile.netp[0] != null ? azurerm_network_profile.netp[0].id : null
 
   os_type        = "Linux"
@@ -61,8 +61,8 @@ resource "azurerm_container_group" "aci" {
         # LAW query:
         # ContainerEvent_CL | order by TimeGenerated desc
         # ContainerInstanceLog_CL  | order by TimeGenerated desc
-        log_type = "ContainerInsights"
-        workspace_id = law.value != null ? law.value.workspace_id : null
+        log_type      = "ContainerInsights"
+        workspace_id  = law.value != null ? law.value.workspace_id : null
         workspace_key = law.value != null ? law.value.primary_shared_key : null
       }
     }
@@ -80,7 +80,7 @@ resource "azurerm_network_profile" "netp" {
     name = local.nic_name
 
     ip_configuration {
-      name = "private"
+      name      = "private"
       subnet_id = azurerm_subnet.private.id
     }
   }
