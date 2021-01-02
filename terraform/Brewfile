@@ -1,5 +1,8 @@
 # Run `brew bundle` to install
 
 brew 'azure-cli'
+
 brew 'tfenv'
 brew 'shihanng/tfvar/tfvar'
+
+brew 'tfsec'

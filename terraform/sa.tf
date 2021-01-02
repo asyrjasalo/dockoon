@@ -3,12 +3,28 @@ locals {
 }
 
 resource "azurerm_storage_account" "sa" {
-  name                     = local.sa_name
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
+  # checkov:skip=CKV_AZURE_35:[TODO] Restrict network to one's IP and VNET
+  # checkov:skip=CKV_AZURE_43:[WONTFIX] Using different naming convention
+  name                = local.sa_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  min_tls_version          = "TLS1_2"
+
+  enable_https_traffic_only = true
+  min_tls_version           = "TLS1_2"
+
+  # checkov:skip=CKV_AZURE_33:[INVALID] Storage queue is not used here
+  /*queue_properties  {
+    logging {
+      delete                = true
+      read                  = true
+      write                 = true
+      version               = "1.0"
+      retention_policy_days = 7
+    }
+  }*/
 
   tags = local.tags
 }
