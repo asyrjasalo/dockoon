@@ -62,7 +62,7 @@ Apply the actual changes in Azure:
 Upload `apis.json` to the environment's Storage Account's File Share `apis`
 to get the container running successfully.
 
-Alternatively, you can configure Docker start command in `environment/*.tfvars`.
+Alternatively, you can set the Docker start command in `environments/*.tfvars`.
 
 ## Command reference
 
