@@ -1,6 +1,6 @@
 # dockoon
 
-[The Docker images](https://hub.docker.com/repository/docker/asyrjasalo/mockoon) include:
+[The Docker images](https://hub.docker.com/r/asyrjasalo/mockoon) include:
 
 - Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`) base
 - Node.js 14 running as non-root user
