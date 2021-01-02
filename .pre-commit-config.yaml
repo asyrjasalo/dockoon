@@ -1,8 +1,7 @@
 # To install:
 
-# pip install --user --upgrade pre-commit checkov
+# pip install --upgrade pre-commit checkov
 # pre-commit install
-# pre-commit run --all-file
 
 repos:
 - repo: https://github.com/gruntwork-io/pre-commit
