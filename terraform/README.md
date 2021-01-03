@@ -104,11 +104,11 @@ DNS challenge:
         --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$DNS_RESOURCE_GROUP_NAME" \
         > secrets/certbot-sp.json
 
-Install [certbot-azure](https://github.com/dlapiduz/certbot-azure):
+Install certbot and [certbot-azure](https://github.com/dlapiduz/certbot-azure):
 
     pip install --upgrade certbot-azure
 
-Obtain the certificate from Let's Encrypt:
+Obtain a certificate from Let's Encrypt:
 
     export YOUR_DOMAIN=""
 
@@ -121,7 +121,9 @@ Obtain the certificate from Let's Encrypt:
         --dns-azure-credentials secrets/certbot-sp.json \
         --dns-azure-resource-group "$DNS_RESOURCE_GROUP_NAME"
 
-Create a `.pfx` file from the certbot output files:
+Add parameters `--renew-by-default --text` if running the command in cron.
+
+Create `secrets/cert.pfx` from the certbot outputted `letsencrypt/` files:
 
     openssl pkcs12 \
         -inkey "letsencrypt/live/$YOUR_DOMAIN/privkey.pem" \
