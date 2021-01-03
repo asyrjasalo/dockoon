@@ -1,4 +1,4 @@
-# On Azure Container Instances (+ Application Gateway)
+# Running on Azure Container Instances
 
 ## Prerequisites
 
@@ -70,6 +70,8 @@ Alternatively, you can set the Docker start command in `environments/*.tfvars`.
 
 A `/24` virtual network with `public` and `private` subnets is always present.
 
+This usually allows delegating services to subnets and using service endpoints.
+
 ### ACI visiblity
 
 By default, ACI is deployed/delegated into the VNET's `private` subnet.
@@ -89,8 +91,10 @@ Use queries:
 
 Set `enable_appgw = true` to forward standard HTTP (80) to the container port.
 
-Enabling HTTPS requires custom certificate (`.pfx`) to be created and uploaded
+Enabling SSL requires custom certificate (`.pfx`) to be created and uploaded
 to the AppGw (not part of Terraform modules).
+
+Having an API Management instance could do as well for HTTPS and authn/authz.
 
 ## Command reference
 
