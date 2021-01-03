@@ -113,7 +113,7 @@ variable "dns_zone_rg_name" {
 
 variable "vnet_address_space" {
   type    = string
-  default = "10.0.10.0/24"
+  default = "10.0.1.0/24"
 }
 
 variable "vnet_dns_servers" {
