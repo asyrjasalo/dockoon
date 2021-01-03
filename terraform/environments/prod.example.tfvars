@@ -38,5 +38,5 @@ vnet_address_space = "10.0.2.0/24"
 # AppGw
 
 enable_appgw  = true
-cert_path     = "secrets/cert.pfx"
+cert_pfx_path = "secrets/cert.pfx"
 cert_password = "P4ssw0rd_of_pfx!"

@@ -127,7 +127,7 @@ Create a password protected `.pfx` file from the `letsencrypt/` files:
         -in "letsencrypt/live/$YOUR_DOMAIN/cert.pem" \
         -export -out "secrets/cert.pfx"
 
-Enter the password and define it as `cert_password` in `.tfvars`.
+Enter a password and define it as `cert_password` in `.tfvars`.
 
 ## Command reference
 
