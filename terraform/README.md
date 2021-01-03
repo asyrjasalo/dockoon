@@ -66,13 +66,11 @@ Alternatively, you can set the Docker start command in `environments/*.tfvars`.
 
 ## Options
 
-### Networking
+### ACI networking
 
 A `/24` virtual network with `public` and `private` subnets is always present.
 
 This usually allows delegating services to subnets and using service endpoints.
-
-### ACI visiblity
 
 By default, ACI is deployed/delegated into the VNET's `private` subnet.
 
@@ -89,12 +87,47 @@ Use queries:
 
 ### Application Gateway
 
-Set `enable_appgw = true` to forward standard HTTP (80) to the container port.
+Set `enable_appgw = true` to respond from the standard HTTP ports (80, 443).
 
-Enabling SSL requires custom certificate (`.pfx`) to be created and uploaded
-to the AppGw (not part of Terraform modules).
+AppGw HTTPS requires `secrets/cert.pfx` to be created locally first.
 
-Having an API Management instance could do as well for HTTPS and authn/authz.
+Install [certbot-azure](https://github.com/dlapiduz/certbot-azure):
+
+    pip install --upgrade certbot-azure
+
+Create a service principal for DNS challenge:
+
+    export SUBSCRIPTION_ID=""
+    export DNS_RESOURCE_GROUP_NAME=""
+    
+    az ad sp create-for-rbac \
+        --name sp-common-certbot-dns \
+        --sdk-auth \
+        --role "DNS Zone Contributor" \
+        --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$DNS_RESOURCE_GROUP_NAME" \
+        > secrets/certbot-sp.json
+
+Obtain the certificate from Let's Encrypt:
+
+    export YOUR_DOMAIN=""
+
+    certbot certonly \
+        --config-dir=letsencrypt \
+        --logs-dir=letsencrypt \
+        --work-dir=letsencrypt \
+        -d "$YOUR_DOMAIN" \
+        -a dns-azure \
+        --dns-azure-credentials secrets/certbot-sp.json \
+        --dns-azure-resource-group "$DNS_RESOURCE_GROUP_NAME"
+
+Create a password protected `.pfx` file from the `letsencrypt/` files:
+
+    openssl pkcs12 \
+        -inkey "letsencrypt/live/$YOUR_DOMAIN/privkey.pem" \
+        -in "letsencrypt/live/$YOUR_DOMAIN/cert.pem" \
+        -export -out "secrets/cert.pfx"
+
+Enter the password and define it as `cert_password` in `.tfvars`.
 
 ## Command reference
 

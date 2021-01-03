@@ -39,7 +39,7 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   backend_http_settings {
-    name                                = "http-${var.container_name}-${var.environment}"
+    name                                = local.aci_name
     cookie_based_affinity               = "Disabled"
     port                                = 8080
     protocol                            = "Http"
@@ -80,11 +80,9 @@ resource "azurerm_application_gateway" "agw" {
     rule_type                  = "Basic"
     http_listener_name         = "listen-http"
     backend_address_pool_name  = "${var.container_name}-${var.environment}"
-    backend_http_settings_name = "http-${var.container_name}-${var.environment}"
+    backend_http_settings_name = local.aci_name
   }
 
-  # SSL would require .pfx certificate file
-  /*
   frontend_port {
     name = "https"
     port = 443
@@ -95,20 +93,26 @@ resource "azurerm_application_gateway" "agw" {
     frontend_ip_configuration_name = "public-ip"
     frontend_port_name             = "https"
     protocol                       = "Https"
+    ssl_certificate_name           = "cert"
   }
-  
+
+  ssl_certificate {
+    name     = "cert"
+    data     = filebase64(var.cert_pfx_path)
+    password = var.cert_password
+  }
+
   request_routing_rule {
     name                       = "request-https"
     rule_type                  = "Basic"
     http_listener_name         = "listen-https"
     backend_address_pool_name  = "${var.container_name}-${var.environment}"
-    backend_http_settings_name = "http-${var.container_name}-${var.environment}"
+    backend_http_settings_name = local.aci_name
   }
-  */
 
   ssl_policy {
     policy_type = "Predefined"
-    policy_name = "AppGwSslPolicy20170401S" # TLSv1_2 minimum
+    policy_name = "AppGwSslPolicy20170401S" # TLSv1_2 min requirement
   }
 
   count = var.enable_appgw ? 1 : 0

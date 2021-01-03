@@ -127,3 +127,13 @@ variable "enable_appgw" {
   type    = bool
   default = false
 }
+
+variable "cert_pfx_path" {
+  type    = string
+  default = "secrets/cert.pfx"
+}
+
+variable "cert_password" {
+  type    = string
+  default = ""
+}

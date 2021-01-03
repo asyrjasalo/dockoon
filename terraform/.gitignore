@@ -19,5 +19,9 @@ environments/
 secrets/
 !secrets/.gitkeep
 
+# certbot
+letsencrypt/
+!letsencrypt/.gitkeep
+
 # private
 *.private.*
