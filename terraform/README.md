@@ -47,7 +47,7 @@ Create `environments/test.tfvars` from `variables.tf` and fill empty variables:
 
     tfvar . > environments/test.tfvars
 
-See `environments/*.example.tfvars` for examples to deploy in VNET or without.
+See `environments/*.example.tfvars` for examples to deploy in non-prod and prod.
 
 Validate and output upcoming changes for the environment:
 
@@ -55,7 +55,7 @@ Validate and output upcoming changes for the environment:
 
 Apply the actual changes in Azure:
 
-    terraform apply "test.tfplan"
+    terraform apply test.tfplan
 
 ### Container volume mount
 
