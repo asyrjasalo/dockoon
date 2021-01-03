@@ -121,14 +121,14 @@ Obtain the certificate from Let's Encrypt:
         --dns-azure-credentials secrets/certbot-sp.json \
         --dns-azure-resource-group "$DNS_RESOURCE_GROUP_NAME"
 
-Create a password protected `.pfx` file from the `letsencrypt/` files:
+Create a `.pfx` file from the certbot output files:
 
     openssl pkcs12 \
         -inkey "letsencrypt/live/$YOUR_DOMAIN/privkey.pem" \
         -in "letsencrypt/live/$YOUR_DOMAIN/cert.pem" \
-        -export -out "secrets/cert.pfx"
+        -export -out secrets/cert.pfx
 
-Enter a password and define it as `cert_password` in `.tfvars`.
+Enter a password for certificate and define it as `cert_password` in `.tfvars`.
 
 ## Command reference
 

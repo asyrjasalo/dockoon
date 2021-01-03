@@ -26,7 +26,7 @@ resource "azurerm_dns_a_record" "pip" {
   name                = "${var.app}.${var.environment}"
   resource_group_name = var.dns_zone_rg_name
   zone_name           = var.dns_zone_name
-  ttl                 = 300
+  ttl                 = 3600
   target_resource_id  = azurerm_public_ip.pip[0].id
 
   tags = local.tags
