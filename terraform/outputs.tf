@@ -1,10 +1,10 @@
 # ACI
 
-output "acr_ip" {
+output "aci_ip" {
   value = azurerm_container_group.aci.ip_address
 }
 
-output "acr_fqdn" {
+output "aci_fqdn" {
   value = azurerm_container_group.aci.fqdn
 }
 
