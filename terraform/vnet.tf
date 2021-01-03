@@ -11,14 +11,12 @@ resource "azurerm_virtual_network" "vnet" {
   dns_servers   = var.vnet_dns_servers
 
   tags = local.tags
-
-  count = var.vnet_address_space != null ? 1 : 0
 }
 
 resource "azurerm_subnet" "public" {
   name                 = "public"
   resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet[0].name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 0)]
 
   # pick below
@@ -38,7 +36,7 @@ resource "azurerm_subnet" "public" {
 resource "azurerm_subnet" "private" {
   name                 = "private"
   resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet[0].name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 2)]
 
   service_endpoints = [
@@ -54,9 +52,9 @@ resource "azurerm_subnet" "private" {
       # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#name
       name = "Microsoft.ContainerInstance/containerGroups"
 
-      actions = [
-        "Microsoft.Network/virtualNetworks/subnets/action"
-      ]
+      #actions = [
+      #  "Microsoft.Network/virtualNetworks/subnets/action"
+      #]
     }
   }
 }

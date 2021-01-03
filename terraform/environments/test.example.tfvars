@@ -1,7 +1,7 @@
 # Scope
 
 location = "WestEurope"
-prefix   = "smth"
+prefix   = "slug"
 
 # Tags
 

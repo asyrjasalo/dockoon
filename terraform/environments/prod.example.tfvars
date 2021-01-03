@@ -1,7 +1,7 @@
 # Scope
 
 location = "WestEurope"
-prefix   = "smth"
+prefix   = "slug"
 
 # Tags
 
@@ -28,4 +28,4 @@ law_sku = "PerGB2018"
 # DNS
 
 dns_zone_name    = "yourdomain.dev"
-dns_zone_rg_name = "smth-prod-yourdomain-rg"
+dns_zone_rg_name = "slug-prod-dns-rg"

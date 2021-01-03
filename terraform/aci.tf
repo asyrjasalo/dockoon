@@ -9,10 +9,9 @@ resource "azurerm_container_group" "aci" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
-  dns_name_label = azurerm_network_profile.netp[0] == null ? "${var.container_name}-${var.environment}" : null
-
-  ip_address_type    = azurerm_network_profile.netp[0] != null ? "Private" : "Public"
-  network_profile_id = azurerm_network_profile.netp[0] != null ? azurerm_network_profile.netp[0].id : null
+  ip_address_type    = var.visibility
+  dns_name_label     = var.visibility == "Public" ? "${var.container_name}-${var.environment}" : null
+  network_profile_id = var.visibility == "Private" ? azurerm_network_profile.netp[0].id : null
 
   os_type        = "Linux"
   restart_policy = var.restart_policy
@@ -87,5 +86,5 @@ resource "azurerm_network_profile" "netp" {
 
   tags = local.tags
 
-  count = var.vnet_address_space != null ? 1 : 0
+  count = var.visibility == "Private" ? 1 : 0
 }

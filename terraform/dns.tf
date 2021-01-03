@@ -7,10 +7,10 @@ resource "azurerm_dns_cname_record" "cname" {
 
   tags = local.tags
 
-  count = var.dns_zone_name != "" && var.vnet_address_space == null ? 1 : 0
+  count = var.dns_zone_name != "" && var.visibility == "Public" ? 1 : 0
 }
 
-# ACI in VNET has no fqdn but has a private IP address
+
 resource "azurerm_dns_a_record" "a" {
   name                = "${var.app}.${var.environment}"
   resource_group_name = var.dns_zone_rg_name
@@ -20,5 +20,5 @@ resource "azurerm_dns_a_record" "a" {
 
   tags = local.tags
 
-  count = var.dns_zone_name != "" && var.vnet_address_space != null ? 1 : 0
+  count = var.dns_zone_name != "" ? 1 : 0
 }

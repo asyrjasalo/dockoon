@@ -34,6 +34,11 @@ variable "contact_email" {
 
 # ACI
 
+variable "visibility" {
+  type    = string
+  default = "Private"
+}
+
 variable "restart_policy" {
   type    = string
   default = "Always"
@@ -108,7 +113,7 @@ variable "dns_zone_rg_name" {
 
 variable "vnet_address_space" {
   type    = string
-  default = null
+  default = "10.0.10.0/24"
 }
 
 variable "vnet_dns_servers" {
