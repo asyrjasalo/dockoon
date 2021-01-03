@@ -11,6 +11,7 @@ contact_email = "yourmail@yourdomain.dev"
 
 # ACI
 
+# visibility = "Private"  # default - use gateway to access
 container_name = "mockoon"
 docker_image   = "asyrjasalo/mockoon:alpine"
 environment_variables = {
@@ -29,3 +30,11 @@ law_sku = "PerGB2018"
 
 dns_zone_name    = "yourdomain.dev"
 dns_zone_rg_name = "slug-prod-dns-rg"
+
+# VNET
+
+vnet_address_space = "10.0.2.0/24"
+
+# AppGw
+
+enable_appgw = true

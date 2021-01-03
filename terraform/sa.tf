@@ -3,8 +3,8 @@ locals {
 }
 
 resource "azurerm_storage_account" "sa" {
-  # checkov:skip=CKV_AZURE_35:[TODO] Restrict network to one's IP and VNET
-  # checkov:skip=CKV_AZURE_43:[WONTFIX] Using different naming convention
+  # checkov:skip=CKV_AZURE_35:[WONTFIX] ACI won't get the SA service endpoint
+  # checkov:skip=CKV_AZURE_43:[WONTFIX] Using a different naming convention
   name                = local.sa_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location

@@ -11,6 +11,7 @@ contact_email = "yourmail@yourdomain.dev"
 
 # ACI
 
+visibility = "Public"
 container_name = "mockoon"
 docker_image   = "asyrjasalo/mockoon:alpine"
 environment_variables = {
@@ -20,7 +21,3 @@ commands = ["sh", "runner.sh", "start", "--data", "/apis/apis.json", "-i", "0"]
 volumes = {
   "apis" = "/apis"
 }
-
-# VNET - use your VPN Gateway to access
-
-vnet_address_space = "172.16.128.0/24"

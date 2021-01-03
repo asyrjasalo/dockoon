@@ -64,6 +64,12 @@ to get the container running successfully.
 
 Alternatively, you can set the Docker start command in `environments/*.tfvars`.
 
+## Application Gateway
+
+Optionally set `enable_appgw = true` in `.tfvars` to forward 80 to the ACI port.
+
+Enabling SSL for AppGw would require custom certificate (`.pfx`) to be uploaded.
+
 ## Command reference
 
 test:

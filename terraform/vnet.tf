@@ -18,6 +18,13 @@ resource "azurerm_subnet" "public" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 0)]
+}
+
+resource "azurerm_subnet" "private" {
+  name                 = "private"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 2)]
 
   # pick below
   service_endpoints = [
@@ -31,19 +38,6 @@ resource "azurerm_subnet" "public" {
     #"Microsoft.Storage",
     #"Microsoft.Web"
   ]
-}
-
-resource "azurerm_subnet" "private" {
-  name                 = "private"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 2)]
-
-  service_endpoints = [
-    "Microsoft.ContainerRegistry", # if using Azure Container Registry
-    "Microsoft.Storage",           # File Share
-    "Microsoft.Web"                # if calling AppService
-  ]
 
   delegation {
     name = "private"
@@ -51,10 +45,6 @@ resource "azurerm_subnet" "private" {
     service_delegation {
       # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#name
       name = "Microsoft.ContainerInstance/containerGroups"
-
-      #actions = [
-      #  "Microsoft.Network/virtualNetworks/subnets/action"
-      #]
     }
   }
 }

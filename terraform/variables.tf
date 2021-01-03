@@ -120,3 +120,10 @@ variable "vnet_dns_servers" {
   type    = list(string)
   default = null
 }
+
+# AppGW
+
+variable "enable_appgw" {
+  type    = bool
+  default = false
+}
