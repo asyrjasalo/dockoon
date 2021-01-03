@@ -11,7 +11,7 @@ contact_email = "yourmail@yourdomain.dev"
 
 # ACI
 
-visibility = "Public"
+visibility     = "Public"
 container_name = "mockoon"
 docker_image   = "asyrjasalo/mockoon:alpine"
 environment_variables = {

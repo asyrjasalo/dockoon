@@ -1,4 +1,4 @@
-# Running on Azure Container Instances
+# On Azure Container Instances (+ Application Gateway)
 
 ## Prerequisites
 
@@ -57,18 +57,40 @@ Apply the actual changes in Azure:
 
     terraform apply "test.tfplan"
 
-## Container volume mount
+### Container volume mount
 
 Upload `apis.json` to the environment's Storage Account's File Share `apis`
 to get the container running successfully.
 
 Alternatively, you can set the Docker start command in `environments/*.tfvars`.
 
-## Application Gateway
+## Options
 
-Optionally set `enable_appgw = true` in `.tfvars` to forward 80 to the ACI port.
+### Networking
 
-Enabling SSL for AppGw would require custom certificate (`.pfx`) to be uploaded.
+A `/24` virtual network with `public` and `private` subnets is always present.
+
+### ACI visiblity
+
+By default, ACI is deployed/delegated into the VNET's `private` subnet.
+
+Set `visibility = Public` to run ACI in public Internet (gets ACI's FQDN).
+
+### Log Analytics Workspace
+
+Set `law_sku = "PerGB2018"` to create a law and log there from the container.
+
+Use queries:
+
+    ContainerInstanceLog_CL | order by TimeGenerated desc
+    ContainerEvent_CL | order by TimeGenerated desc
+
+### Application Gateway
+
+Set `enable_appgw = true` to forward standard HTTP (80) to the container port.
+
+Enabling HTTPS requires custom certificate (`.pfx`) to be created and uploaded
+to the AppGw (not part of Terraform modules).
 
 ## Command reference
 

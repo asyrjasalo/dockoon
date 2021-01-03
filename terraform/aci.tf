@@ -57,9 +57,6 @@ resource "azurerm_container_group" "aci" {
 
     content {
       log_analytics {
-        # LAW queries:
-        # ContainerEvent_CL | order by TimeGenerated desc
-        # ContainerInstanceLog_CL | order by TimeGenerated desc
         log_type      = "ContainerInsights"
         workspace_id  = law.value != null ? law.value.workspace_id : null
         workspace_key = law.value != null ? law.value.primary_shared_key : null
