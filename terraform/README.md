@@ -91,11 +91,8 @@ Set `enable_appgw = true` to respond from the standard HTTP ports (80, 443).
 
 AppGw HTTPS requires `secrets/cert.pfx` to be created locally first.
 
-Install [certbot-azure](https://github.com/dlapiduz/certbot-azure):
-
-    pip install --upgrade certbot-azure
-
-Create a service principal for DNS challenge:
+Create a service principal for [Certbot](https://certbot.eff.org/)
+DNS challenge:
 
     export SUBSCRIPTION_ID=""
     export DNS_RESOURCE_GROUP_NAME=""
@@ -106,6 +103,10 @@ Create a service principal for DNS challenge:
         --role "DNS Zone Contributor" \
         --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$DNS_RESOURCE_GROUP_NAME" \
         > secrets/certbot-sp.json
+
+Install [certbot-azure](https://github.com/dlapiduz/certbot-azure):
+
+    pip install --upgrade certbot-azure
 
 Obtain the certificate from Let's Encrypt:
 

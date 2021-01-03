@@ -38,14 +38,19 @@ resource "azurerm_application_gateway" "agw" {
     ip_addresses = [azurerm_container_group.aci.ip_address]
   }
 
-  backend_http_settings {
-    name                                = local.aci_name
-    cookie_based_affinity               = "Disabled"
-    port                                = 8080
-    protocol                            = "Http"
-    probe_name                          = "healthcheck"
-    request_timeout                     = 60
-    pick_host_name_from_backend_address = true
+  dynamic "backend_http_settings" {
+    for_each = var.ports
+    iterator = port
+
+    content {
+      name                                = "${local.aci_name}:${port.value}"
+      cookie_based_affinity               = "Disabled"
+      port                                = port.value
+      protocol                            = "Http"
+      probe_name                          = "healthcheck"
+      request_timeout                     = 60
+      pick_host_name_from_backend_address = true
+    }
   }
 
   probe {
@@ -62,6 +67,8 @@ resource "azurerm_application_gateway" "agw" {
     name                 = "public-ip"
     public_ip_address_id = azurerm_public_ip.pip[0].id
   }
+
+  # HTTP
 
   frontend_port {
     name = "http"
@@ -82,6 +89,8 @@ resource "azurerm_application_gateway" "agw" {
     backend_address_pool_name  = "${var.container_name}-${var.environment}"
     backend_http_settings_name = local.aci_name
   }
+
+  # HTTPS
 
   frontend_port {
     name = "https"
