@@ -94,8 +94,8 @@ AppGw HTTPS requires `secrets/cert.pfx` to be created locally first.
 Create a service principal for [Certbot](https://certbot.eff.org/)
 DNS challenge:
 
-    export SUBSCRIPTION_ID=""
-    export DNS_RESOURCE_GROUP_NAME=""
+    export SUBSCRIPTION_ID="00000000-0000-0000-0000-000000000000"
+    export DNS_RESOURCE_GROUP_NAME="slug-common-dns-rg"
     
     az ad sp create-for-rbac \
         --name sp-common-certbot-dns \
@@ -110,12 +110,15 @@ Install certbot and [certbot-azure](https://github.com/dlapiduz/certbot-azure):
 
 Obtain a certificate from Let's Encrypt:
 
-    export YOUR_DOMAIN=""
+    export YOUR_DOMAIN="dockoon.test.yourdomain.dev"
+    export YOUR_EMAIL="yourmail@yourdomain.dev"
 
     certbot certonly \
         --config-dir=letsencrypt \
         --logs-dir=letsencrypt \
         --work-dir=letsencrypt \
+        --email="$YOUR_EMAIL" \
+        --agree-tos \
         -d "$YOUR_DOMAIN" \
         -a dns-azure \
         --dns-azure-credentials secrets/certbot-sp.json \

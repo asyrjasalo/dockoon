@@ -2,22 +2,26 @@
   "entries": {
     "brew": {
       "azure-cli": {
-        "version": "2.16.0",
+        "version": "2.17.0_1",
         "bottle": {
           "cellar": ":any",
           "prefix": "/usr/local",
           "files": {
             "big_sur": {
-              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.16.0.big_sur.bottle.tar.gz",
-              "sha256": "060e866d833bffdc0b57cb799cc07c8c3adffe852702745d66a8fadf8d733591"
+              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.17.0_1.big_sur.bottle.tar.gz",
+              "sha256": "77777412ad70789b071aa008c3ab8fa277343207bfbce8d554182526e8948ad5"
+            },
+            "arm64_big_sur": {
+              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.17.0_1.arm64_big_sur.bottle.tar.gz",
+              "sha256": "e2c36f0f3cf454d3d4aab96c8cb48104d40641c97f5127b92b91cd9a2841c66a"
             },
             "catalina": {
-              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.16.0.catalina.bottle.tar.gz",
-              "sha256": "6bfac908b777166222ad3bb247162d881520ee322107f476fbba2f4d520e373f"
+              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.17.0_1.catalina.bottle.tar.gz",
+              "sha256": "9ba3bba14d49bd91dc67930b42ab0d2deb9dca25194ac25497e93dc9553ba62d"
             },
             "mojave": {
-              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.16.0.mojave.bottle.tar.gz",
-              "sha256": "2671ac78e9e0a19e9a82632106a343256a53eae3f55aeb1b1764553a91f90384"
+              "url": "https://homebrew.bintray.com/bottles/azure-cli-2.17.0_1.mojave.bottle.tar.gz",
+              "sha256": "7d03a37ef8d12571260142c57abeadb1764c17f8d521b040733fd6b1774a7ea9"
             }
           }
         }
@@ -26,17 +30,21 @@
         "version": "2.0.0",
         "bottle": false
       },
-      "shihanng/tfvar/tfvar": null
+      "shihanng/tfvar/tfvar": null,
+      "tfsec": {
+        "version": "0.27.0",
+        "bottle": false
+      }
     }
   },
   "system": {
     "macos": {
       "catalina": {
-        "HOMEBREW_VERSION": "2.7.0-100-gda0d7ef",
+        "HOMEBREW_VERSION": "2.7.1-119-g4a90a5a",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "6be2ebcf8697c527827c83d8e37f8619f436ca7e",
-        "CLT": "12.0.32.21",
-        "Xcode": "12.0",
+        "Homebrew/homebrew-core": "39af1529f356db9c9b20409e24ed763d8950f960",
+        "CLT": "1103.0.32.62",
+        "Xcode": "11.5",
         "macOS": "10.15.7"
       }
     }
