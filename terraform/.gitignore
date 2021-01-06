@@ -11,6 +11,9 @@
 # terraform plan outputs
 *.tfplan
 
+# terraform backend vars
+backend/*.backend
+
 # tfvars
 environments/
 !environments/*.example.tfvars

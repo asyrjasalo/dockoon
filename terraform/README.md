@@ -31,7 +31,7 @@ Set names for the infra resources in `config.sh`, then run:
 
     backend/create_tf_backend.sh
 
-Configure remote state resource names in `backend/*.backend` files accordingly.
+The script creates `backend/*.backend` for test, stg and prod environments.
 
 ## Create or upgrade environment
 

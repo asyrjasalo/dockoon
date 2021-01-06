@@ -46,10 +46,22 @@ run_cmd az storage container create --name "test" \
   --account-name "$STORAGE_ACCOUNT_NAME" \
   --account-key "$storage_account_key"
 
+echo "resource_group_name  = \"$RESOURCE_GROUP_NAME\"" > "$this_path/test.backend"
+echo "storage_account_name = \"$STORAGE_ACCOUNT_NAME\"" >> "$this_path/test.backend"
+echo "container_name = \"test\"" >> "$this_path/test.backend"
+
 run_cmd az storage container create --name "stg" \
   --account-name "$STORAGE_ACCOUNT_NAME" \
   --account-key "$storage_account_key"
 
+echo "resource_group_name  = \"$RESOURCE_GROUP_NAME\"" > "$this_path/stg.backend"
+echo "storage_account_name = \"$STORAGE_ACCOUNT_NAME\"" >> "$this_path/stg.backend"
+echo "container_name = \"stg\"" >> "$this_path/stg.backend"
+
 run_cmd az storage container create --name "prod" \
   --account-name "$STORAGE_ACCOUNT_NAME" \
   --account-key "$storage_account_key"
+
+echo "resource_group_name  = \"$RESOURCE_GROUP_NAME\"" > "$this_path/prod.backend"
+echo "storage_account_name = \"$STORAGE_ACCOUNT_NAME\"" >> "$this_path/prod.backend"
+echo "container_name = \"prod\"" >> "$this_path/prod.backend"
