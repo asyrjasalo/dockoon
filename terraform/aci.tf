@@ -10,7 +10,7 @@ resource "azurerm_container_group" "aci" {
   location            = azurerm_resource_group.rg.location
 
   ip_address_type    = var.visibility
-  dns_name_label     = var.visibility == "Public" ? "${var.container_name}-${var.environment}" : null
+  dns_name_label     = var.visibility == "Public" ? "${var.app}-${var.environment}" : null
   network_profile_id = var.visibility == "Private" ? azurerm_network_profile.netp[0].id : null
 
   os_type        = "Linux"

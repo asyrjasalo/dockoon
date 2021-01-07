@@ -98,7 +98,7 @@ DNS challenge:
     export DNS_RESOURCE_GROUP_NAME="slug-common-dns-rg"
     
     az ad sp create-for-rbac \
-        --name sp-common-certbot-dns \
+        --name sp-dockoon-common-certbot \
         --sdk-auth \
         --role "DNS Zone Contributor" \
         --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$DNS_RESOURCE_GROUP_NAME" \
@@ -131,7 +131,7 @@ Create `secrets/cert.pfx` from the certbot outputted `letsencrypt/` files:
     openssl pkcs12 \
         -inkey "letsencrypt/live/$YOUR_DOMAIN/privkey.pem" \
         -in "letsencrypt/live/$YOUR_DOMAIN/cert.pem" \
-        -export -out secrets/cert.pfx
+        -export -out secrets/$YOUR_DOMAIN.pfx
 
 Enter a password for certificate and define it as `cert_password` in `.tfvars`.
 
