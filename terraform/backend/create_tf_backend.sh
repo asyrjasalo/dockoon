@@ -16,13 +16,16 @@ source "$this_path/../config.sh"
 run_cmd az account set --subscription "$SUBSCRIPTION_ID"
 
 # Create resource group
-run_cmd az group create --name "$RESOURCE_GROUP_NAME" --location "$LOCATION"
+run_cmd az group create --name "$RESOURCE_GROUP_NAME" \
+  --location "$LOCATION"
 
 # Create storage account
 run_cmd az storage account create --resource-group "$RESOURCE_GROUP_NAME" \
   --name "$STORAGE_ACCOUNT_NAME" \
   --sku Standard_LRS \
   --encryption-services blob \
+  --min-tls-version TLS1_2 \
+  --allow-blob-public-access false \
   --location "$LOCATION"
 
 # Get storage account key
