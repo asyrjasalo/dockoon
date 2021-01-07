@@ -19,7 +19,8 @@ run_cmd az account set --subscription "$SUBSCRIPTION_ID"
 ARM_ACCESS_KEY="$(az keyvault secret show \
     --name "$VAULT_STORAGE_ACCOUNT_KEY_NAME" \
     --vault-name "$VAULT_NAME" \
-    --query value -o tsv)"
+    --query value \
+    --output tsv)"
 
 ### export variables ###########################################################
 

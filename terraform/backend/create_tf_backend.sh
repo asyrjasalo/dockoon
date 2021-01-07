@@ -20,9 +20,10 @@ run_cmd az group create --name "$RESOURCE_GROUP_NAME" \
   --location "$LOCATION"
 
 # Create storage account
-run_cmd az storage account create --resource-group "$RESOURCE_GROUP_NAME" \
-  --name "$STORAGE_ACCOUNT_NAME" \
-  --sku Standard_LRS \
+run_cmd az storage account create --name "$STORAGE_ACCOUNT_NAME" \
+  --resource-group "$RESOURCE_GROUP_NAME" \
+  --sku Standard_ZRS \
+  --access-tier Hot \
   --encryption-services blob \
   --min-tls-version TLS1_2 \
   --allow-blob-public-access false \
@@ -32,7 +33,8 @@ run_cmd az storage account create --resource-group "$RESOURCE_GROUP_NAME" \
 storage_account_key=$(az storage account keys list \
   --resource-group "$RESOURCE_GROUP_NAME" \
   --account-name "$STORAGE_ACCOUNT_NAME" \
-  --query [0].value -o tsv)
+  --query [0].value \
+  --output tsv)
 
 # Create key vault
 run_cmd az keyvault create --name "$VAULT_NAME" \
