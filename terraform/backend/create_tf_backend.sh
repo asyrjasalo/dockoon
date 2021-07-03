@@ -9,7 +9,7 @@ if [ ! -f "$this_path/../config.sh" ]; then
   exit 1
 fi
 
-# shellcheck disable=SC1090
+# shellcheck disable=SC1091
 source "$this_path/../config.sh"
 
 # Set subscription
@@ -38,6 +38,7 @@ storage_account_key=$(az storage account keys list \
 
 # Create key vault
 run_cmd az keyvault create --name "$VAULT_NAME" \
+  --enable-soft-delete true \
   --resource-group "$RESOURCE_GROUP_NAME" \
   --location "$LOCATION"
 
