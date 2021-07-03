@@ -54,6 +54,9 @@ Alpine Linux:
 
     docker/build_and_test_image
 
+If no [vulnerabilities are found](https://docs.docker.com/engine/scan/)
+in the built image, the container will run and output `mockoon-cli` version.
+
 Pass variable `BUILD_ARGS` to override the default `docker build` arguments.
 
 Pass `IMAGE_KIND` to build on non-Alpine Dockerfile. For Debian Buster (slim):
@@ -65,7 +68,7 @@ Pass `BUILD_DIR` to override the dir path where `Dockerfile.IMAGE_KIND` is in.
 
 ### Pushing the base image
 
-Run `docker login` before the scripts.
+Run `docker login` before running the scripts.
 
 Push the image to your private Docker registry:
 
@@ -77,7 +80,7 @@ Tag and push the image `mockoon:alpine` to [Docker Hub](https://hub.docker.com):
     REGISTRY_URL="$USER" \
       docker/tag_and_push_image
 
-Tag and push the image `mockoon:slimbuster` (note: first, build a Debian image):
+If Debian image was built instead, tag and push the image `mockoon:slimbuster`:
 
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
