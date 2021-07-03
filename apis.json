@@ -1,11 +1,11 @@
 {
-    "source": "mockoon:1.11.0",
+    "source": "mockoon:1.14.1",
     "data": [
         {
             "type": "environment",
             "item": {
                 "uuid": "",
-                "lastMigration": 13,
+                "lastMigration": 15,
                 "name": "jsonplaceholder",
                 "endpointPrefix": "",
                 "latency": 0,
@@ -37,7 +37,8 @@
                             }
                         ],
                         "enabled": true,
-                        "randomResponse": false
+                        "randomResponse": false,
+                        "sequentialResponse": false
                     }
                 ],
                 "proxyMode": true,
@@ -61,7 +62,8 @@
                         "key": "",
                         "value": ""
                     }
-                ]
+                ],
+                "proxyRemovePrefix": false
             }
         }
     ]
