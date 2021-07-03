@@ -5,3 +5,4 @@ cask 'mockoon'
 
 # For .pre-commit-config.yaml
 brew 'shellcheck'
+brew 'checkov'
