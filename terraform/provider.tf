@@ -4,10 +4,10 @@ terraform {
   }
 
   required_providers {
-    azurerm = "~> 2.40.0"
+    azurerm = "= 2.66.0"
   }
 
-  required_version = "~> 0.14"
+  required_version = "~> 1.0"
 }
 
 provider "azurerm" {
