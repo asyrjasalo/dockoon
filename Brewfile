@@ -6,4 +6,3 @@ cask 'mockoon'
 # For .pre-commit-config.yaml
 brew 'pre-commit'
 brew 'shellcheck'
-brew 'checkov'
