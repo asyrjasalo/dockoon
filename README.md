@@ -15,14 +15,14 @@ Install development dependencies:
 If casks are not available for your OS, you can download and install Mockoon
 [from the official page](https://mockoon.com/#download).
 
-## Running locally
+## Usage
 
 Build and run proxy to [jsonplaceholder](https://jsonplaceholder.typicode.com/)
 at [:8080](https://localhost:8080) from `Dockerfile`:
 
     ./dockoon
 
-You can use Mockoon GUI to edit `apis.json` copied to the image by the script.
+Use Mockoon GUI to edit `apis.json` copied to the image and re-run the script.
 
 Any `mockoon-cli` arguments are accepted:
 
@@ -38,7 +38,15 @@ Pass variable `RUN_ARGS` to include additional `docker run` arguments:
     RUN_ARGS="-p 4000:4000" \
       ./dockoon start --data apis.json --name jsonplaceholder --port 4000
 
-## Build a base image
+## Cloud deployment
+
+See `terraform/README.md` for running on Azure Container Instances.
+
+## Contributing
+
+On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
+
+### Building a base image
 
 Alpine Linux:
 
@@ -53,7 +61,7 @@ Pass `IMAGE_KIND` to build on non-Alpine Dockerfile. For Debian Buster (slim):
 
 Pass `BUILD_DIR` to override the dir path where `Dockerfile.IMAGE_KIND` is in.
 
-## Push the base image
+### Pushing the base image
 
 Run `docker login` before the scripts.
 
@@ -72,11 +80,3 @@ Tag and push the image `mockoon:slimbuster` (note: first, build a Debian image):
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
       docker/tag_and_push_image
-
-## Cloud deployment
-
-See `terraform/README.md` for running on Azure Container Instances.
-
-## Contributing
-
-On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
