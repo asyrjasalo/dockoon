@@ -24,9 +24,11 @@ at [:8080](https://localhost:8080) from `Dockerfile`:
 
 Use Mockoon GUI to edit `apis.json` copied to the image and re-run the script.
 
-Any `mockoon-cli` arguments are accepted:
+Or fetch `apis.json` over the wire as any `mockoon-cli` arguments are accepted:
 
     ./dockoon start --data https://file-server/apis.json --index 0 --port 8080
+
+### Customizing Docker environment
 
 Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
@@ -40,7 +42,7 @@ Pass variable `RUN_ARGS` to include additional `docker run` arguments:
 
 ## Cloud deployment
 
-See `terraform/README.md` for running on Azure Container Instances.
+See `terraform/README.md` for serving mock APIs on Azure Container Instances.
 
 ## Contributing
 
