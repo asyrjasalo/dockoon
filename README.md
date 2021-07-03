@@ -8,9 +8,14 @@
 
 ## Setup
 
-Install [mockoon](https://mockoon.com/) to edit `apis.json` via GUI. On OS X:
+Install development dependencies:
 
     brew bundle
+
+If casks are not available for your OS, you can download Mockoon
+[from the official page](https://mockoon.com/#download).
+
+Then use Mockoon to edit `apis.json` via GUI.
 
 ## Running locally
 
@@ -71,3 +76,7 @@ Tag and push the image `mockoon:slimbuster` (note: first, build a Debian image):
 ## Cloud deployment
 
 See `terraform/README.md` for running on Azure Container Instances.
+
+## Contributing
+
+On Git commit, hooks in `.pre-commit-config.yaml` will be installed and ran.

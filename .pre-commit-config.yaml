@@ -1,6 +1,6 @@
 # To install:
 
-# pip install --upgrade pre-commit checkov
+# brew bundle
 # pre-commit install
 
 repos:
