@@ -6,16 +6,14 @@
 - Node.js 14 running as non-root user
 - Latest [@mockoon/cli](https://www.npmjs.com/package/@mockoon/cli)
 
-## Setup
+## Prerequisites
 
 Install development dependencies:
 
     brew bundle
 
-If casks are not available for your OS, you can download Mockoon
+If casks are not available for your OS, you can download and install Mockoon
 [from the official page](https://mockoon.com/#download).
-
-Then use Mockoon to edit `apis.json` via GUI.
 
 ## Running locally
 
@@ -24,7 +22,9 @@ at [:8080](https://localhost:8080) from `Dockerfile`:
 
     ./dockoon
 
-Any `mockoon` CLI arguments are accepted:
+You can use Mockoon GUI to edit `apis.json` copied to the image by the script.
+
+Any `mockoon-cli` arguments are accepted:
 
     ./dockoon start --data https://file-server/apis.json --index 0 --port 8080
 
@@ -79,4 +79,4 @@ See `terraform/README.md` for running on Azure Container Instances.
 
 ## Contributing
 
-On Git commit, hooks in `.pre-commit-config.yaml` will be installed and ran.
+On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
