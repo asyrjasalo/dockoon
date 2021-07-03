@@ -26,23 +26,26 @@ resource "azurerm_subnet" "private" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [cidrsubnet(var.vnet_address_space, 2, 2)]
 
-  # pick below
   service_endpoints = [
-    #"Microsoft.AzureActiveDirectory",
-    #"Microsoft.AzureCosmosDB",
-    #"Microsoft.ContainerRegistry",
-    #"Microsoft.EventHub", 
-    #"Microsoft.KeyVault",
-    #"Microsoft.ServiceBus",
-    #"Microsoft.Sql",
-    #"Microsoft.Storage",
-    #"Microsoft.Web"
+    "Microsoft.AzureActiveDirectory",
+    "Microsoft.AzureCosmosDB",
+    "Microsoft.ContainerRegistry",
+    "Microsoft.EventHub",
+    "Microsoft.KeyVault",
+    "Microsoft.ServiceBus",
+    "Microsoft.Sql",
+    "Microsoft.Storage",
+    "Microsoft.Web"
   ]
 
   delegation {
     name = "private"
 
     service_delegation {
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/action",
+      ]
+
       # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#name
       name = "Microsoft.ContainerInstance/containerGroups"
     }
