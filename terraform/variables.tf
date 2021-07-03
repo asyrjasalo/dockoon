@@ -71,7 +71,7 @@ variable "secure_environment_variables" {
 
 variable "vcpu_count" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "memory_gbs" {
