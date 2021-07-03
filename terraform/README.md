@@ -41,7 +41,7 @@ Get `ARM_ACCESS_KEY` from infra Key vault and export it for TF Azure provider:
 
 Install providers according to TF lockfile and catch up with the remote state:
 
-    terraform init -backend-config=backend/test.backend -reconfigure
+    terraform init -backend-config=backend/test.backend -reconfigure -upgrade
 
 Create `environments/test.tfvars` from `variables.tf` and fill empty variables:
 
