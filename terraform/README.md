@@ -70,9 +70,7 @@ Alternatively, you can set the Docker start command in `environments/*.tfvars`.
 
 A `/24` virtual network with `public` and `private` subnets is always present.
 
-This usually allows delegating services to subnets and using service endpoints.
-
-By default, ACI is deployed/delegated into the VNET's `private` subnet.
+By default (`visibility = Private`) ACI is delegated into the `private` subnet.
 
 Set `visibility = Public` to run ACI in public Internet (gets ACI's FQDN).
 
