@@ -16,20 +16,23 @@ Use Azure CLI to install or upgrade [bicep](https://github.com/Azure/bicep):
 
 ## Prerequisites
 
-### Certificates
+### Domain name
 
-Deploy [keyvault-acmebot](https://github.com/shibayan/keyvault-acmebot)
-in the same Azure subscription (but in a separate resource group).
+You must own an domain which is delegated to a public DNS zone present in the same Azure subscription. This allows deployment to create the DNS records for
+Azure Container Instances and the API Management in the zone.
 
-The deployment creates a Function App automatically issues/renews certificates and creates a key vault in which the certificates are stored.
+### SSL certificate
 
-Use the web GUI to issue a wildcard certificates and note both the key vault
-and the certificate names as you will need them further below.
+Deploy [keyvault-acmebot](https://github.com/shibayan/keyvault-acmebot) in the
+same Azure subscription. The deployment will create a separate resource group.
 
-### DNS zone
+The deployment creates an consumption tier Function App for automatically
+and periodically renewing certificates. It also creates a key vault in which
+the certificates are created and updated.
 
-An existing DNS zone must be present for the deployment to create DNS records 
-for Azure Container Instances and API Management.
+Use the web GUI to issue a new wildcard certificate. Note the certificate name,
+as you need to configure it further below (along with the key vault name and
+the key vault resource group name).
 
 ## Deploy
 
@@ -64,17 +67,18 @@ Deploy to the resource group:
         -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
-Note that the DNS zone and the key vault related *deployments* are created in their own respective resource groups.
+Note that the DNS and the key vault related *deployments* are created and thus
+visible in their own resource groups.
 
 ## Usage
 
 Add your client IP as allowed in the Storage Account's Networking settings and
-upload `apis.json` to File shared named `share` to get the container running.
+upload `apis.json` to a File shared named `share` to get the container running.
 
-Alternatively, configure the Docker start command in `aci.bicep` if you rather
-load the API definitions over HTTPS.
+Alternatively, you can configure the Docker start command in `aci.bicep`
+if you rather load the API definitions over HTTPS.
 
-Finally, create a new API in API Management with the backend URL created in the DNS zone for the Azure Container Instances (resolving to a private IP).
+Finally, create a new API in API Management with the backend URL created in the DNS zone for the Azure Container Instances (which resolves to a private IP).
 
 As the API Management itslef is deployed in the public network (external mode) 
-make sure you require subscription key for the APIs in API Management.
+so make sure you require subscription key for the APIs hosted in API Management.
