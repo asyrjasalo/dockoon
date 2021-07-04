@@ -7,6 +7,7 @@ PARAMETERS
 param apim_name string
 param subnet_id string
 param law_id string
+param ai_name string
 param key_vault_name string
 param key_vault_cert_name string
 param dns_zone_name string
@@ -30,6 +31,10 @@ EXISTING RESOURCES
 
 resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
   name: uami_name
+}
+
+resource ai 'Microsoft.Insights/components@2020-02-02-preview' existing = {
+  name: ai_name
 }
 
 /*
@@ -95,7 +100,34 @@ resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' = {
   }
 }
 
-resource diag 'microsoft.insights/diagnosticSettings@2017-05-01-preview' = {
+resource logger 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
+  name: ai.name
+  parent: apim
+  properties: {
+    loggerType: 'applicationInsights'
+    description: 'Logger resources to APIM'
+    credentials: {
+      instrumentationKey: ai.properties.InstrumentationKey
+    }
+    isBuffered: true
+  }
+}
+
+resource loggerAi 'Microsoft.ApiManagement/service/diagnostics@2020-06-01-preview' = {
+  name: 'applicationinsights'
+  parent: apim
+  properties: {
+    loggerId: logger.id
+    alwaysLog: 'allErrors'
+    logClientIp: true
+    sampling: {
+      percentage: 100
+      samplingType: 'fixed'
+    }
+  }
+}
+
+resource logLaw 'microsoft.insights/diagnosticSettings@2017-05-01-preview' = {
   name: 'log-to-law'
   scope: apim
   properties: {
@@ -131,5 +163,4 @@ OUTPUTS
 ------------------------------------------------------------------------------
 */
 
-output apiManagementId string = apim.id
 output apiManagementVirtualIpAddress string = apim.properties.publicIPAddresses[0]

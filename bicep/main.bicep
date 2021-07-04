@@ -70,18 +70,6 @@ MODULES
 ------------------------------------------------------------------------------
 */
 
-// User Assigned Managed Identity
-
-module uami './uami.bicep' = {
-  name: 'uami'
-  params: {
-    uami_name: uami_name
-    tags: tags
-  }
-}
-
-var uami_principal_id = uami.outputs.principalId
-
 // Virtual Network
 
 module vnet './vnet.bicep' = {
@@ -143,6 +131,18 @@ module ai './ai.bicep' = {
   }
 }
 
+// User Assigned Managed Identity
+
+module uami './uami.bicep' = {
+  name: 'uami'
+  params: {
+    uami_name: uami_name
+    tags: tags
+  }
+}
+
+var uami_principal_id = uami.outputs.principalId
+
 // Key Vault
 
 module kv './kv.bicep' = {
@@ -162,6 +162,7 @@ module apim './apim.bicep' = {
     apim_name: apim_name
     subnet_id: public_subnet_id
     law_id: law_id
+    ai_name: ai_name
     dns_zone_name: dns_zone_name
     key_vault_name: key_vault_name
     key_vault_cert_name: key_vault_cert_name
