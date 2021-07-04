@@ -23,7 +23,8 @@ in the same Azure subscription (but in a separate resource group).
 
 The deployment creates a Function App automatically issues/renews certificates and creates a key vault in which the certificates are stored.
 
-Use the function app GUI to issue wildcard certificates (left as an exercise).
+Use the web GUI to issue a wildcard certificates and note both the key vault
+and the certificate names as you will need them further below.
 
 ### DNS zone
 
@@ -53,14 +54,15 @@ Deploy to the resource group:
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --template-file ./main.bicep \
-        --parameters prefix="$AZ_PREFIX" \
-        --parameters app="$AZ_APP" \
-        --parameters environment="$AZ_ENVIRONMENT" \
-        --parameters owner="devops@$AZ_DNS_ZONE_NAME" \
-        --parameters dns_zone_name="$AZ_DNS_ZONE_NAME" \
-        --parameters dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
-        --parameters key_vault_name="$AZ_KEY_VAULT_NAME" \
-        --parameters key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME"
+        -p prefix="$AZ_PREFIX" \
+        -p app="$AZ_APP" \
+        -p environment="$AZ_ENVIRONMENT" \
+        -p owner="devops@$AZ_DNS_ZONE_NAME" \
+        -p dns_zone_name="$AZ_DNS_ZONE_NAME" \
+        -p dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
+        -p key_vault_name="$AZ_KEY_VAULT_NAME" \
+        -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
+        -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
 Note that the DNS zone and the key vault related *deployments* are created in their own respective resource groups.
 

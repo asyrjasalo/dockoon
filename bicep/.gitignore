@@ -1,1 +1,5 @@
+# environment config
 *.env
+
+# private
+*.private.*

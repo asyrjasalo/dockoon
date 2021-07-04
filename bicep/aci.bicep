@@ -49,16 +49,16 @@ resource netp 'Microsoft.Network/networkProfiles@2020-11-01' = {
   name: 'netp'
   location: resourceGroup().location
   tags: tags
-  properties:{
-    containerNetworkInterfaceConfigurations:[
+  properties: {
+    containerNetworkInterfaceConfigurations: [
       {
-        name : aci_nic_name
-        properties:{
+        name: aci_nic_name
+        properties: {
           ipConfigurations: [
             {
               name: 'private'
-              properties:{
-                subnet:{
+              properties: {
+                subnet: {
                   id: aci_subnet_id
                 }
               }

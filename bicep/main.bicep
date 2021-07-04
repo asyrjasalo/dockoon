@@ -27,7 +27,6 @@ param environment string = 'test'
 @maxLength(32)
 param owner string
 
-
 @description('Existing DNS zone name in the subscription for records')
 param dns_zone_name string
 
@@ -39,6 +38,9 @@ param key_vault_name string
 
 @description('Resource group of the key vault')
 param key_vault_rg_name string
+
+@description('Certificate name for the wildcard cert stored in the key vault')
+param key_vault_cert_name string
 
 /*
 ------------------------------------------------------------------------------
@@ -147,7 +149,7 @@ module kv './kv.bicep' = {
   name: 'kv'
   params: {
     key_vault_name: key_vault_name
-    uami_object_id : uami_principal_id
+    uami_object_id: uami_principal_id
   }
   scope: resourceGroup(key_vault_rg_name)
 }
@@ -160,8 +162,10 @@ module apim './apim.bicep' = {
     apim_name: apim_name
     subnet_id: public_subnet_id
     law_id: law_id
+    dns_zone_name: dns_zone_name
     key_vault_name: key_vault_name
-    uami_name : uami_name
+    key_vault_cert_name: key_vault_cert_name
+    uami_name: uami_name
     tags: tags
   }
 }

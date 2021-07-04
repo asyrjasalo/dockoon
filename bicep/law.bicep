@@ -17,10 +17,10 @@ resource law 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
   name: law_name
   location: resourceGroup().location
   tags: tags
-  properties:{
-    sku:{
+  properties: {
+    sku: {
       name: 'PerGB2018'
-    } 
+    }
     retentionInDays: 30
     features: {
       enableLogAccessUsingOnlyResourcePermissions: true

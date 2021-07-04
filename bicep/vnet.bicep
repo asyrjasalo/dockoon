@@ -30,25 +30,25 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-07-01' = {
   location: resourceGroup().location
   tags: tags
   properties: {
-    addressSpace:{
-      addressPrefixes:[
+    addressSpace: {
+      addressPrefixes: [
         vnet_mask
       ]
     }
-    subnets:[
+    subnets: [
       {
         name: public_subnet_name
-        properties:{
+        properties: {
           addressPrefix: public_subnet_mask
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
           serviceEndpoints: []
           delegations: []
         }
-      }     
+      }
       {
         name: private_subnet_name
-        properties:{
+        properties: {
           addressPrefix: private_subnet_mask
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
@@ -109,16 +109,16 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-07-01' = {
               ]
             }
           ]
-          delegations:[
+          delegations: [
             {
               name: 'aci'
-              properties:{
-                serviceName:'Microsoft.ContainerInstance/containerGroups'
+              properties: {
+                serviceName: 'Microsoft.ContainerInstance/containerGroups'
               }
             }
           ]
         }
-      }         
+      }
     ]
     virtualNetworkPeerings: []
     enableDdosProtection: false
