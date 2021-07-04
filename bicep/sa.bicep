@@ -54,7 +54,6 @@ resource share 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-02-01
   name: '${sa_name}/default/${sa_fs_name}'
   properties: {
     shareQuota: 1
-    enabledProtocols: 'SMB'
   }
   dependsOn: [
     sa

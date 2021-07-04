@@ -124,7 +124,7 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-03-01' = {
           shareName: 'share'
           readOnly: true
           storageAccountName: sa_name
-          storageAccountKey: listKeys(sa_id, '2018-02-01').keys[0].value
+          storageAccountKey: listKeys(sa_id, '2019-06-01').keys[0].value
         }
       }
     ]

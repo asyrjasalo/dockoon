@@ -7,17 +7,74 @@ PARAMETERS
 param vnet_name string
 param tags object
 
+param vnet_mask string = '172.16.128.0/24'
+param public_subnet_name string = 'public'
+param public_subnet_mask string = '172.16.128.0/25'
+param private_subnet_name string = 'private'
+param private_subnet_mask string = '172.16.128.128/25'
+
 /*
 ------------------------------------------------------------------------------
 VARIABLES
 ------------------------------------------------------------------------------
 */
 
-var vnet_mask = '172.16.128.0/24'
-var public_subnet_name = 'public'
-var public_subnet_mask = '172.16.128.0/25'
-var private_subnet_name = 'private'
-var private_subnet_mask = '172.16.128.128/25'
+var all_service_endpoints = [
+  {
+    service: 'Microsoft.AzureActiveDirectory'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.AzureCosmosDB'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.ContainerRegistry'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.EventHub'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.KeyVault'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.ServiceBus'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.Sql'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.Storage'
+    locations: [
+      '*'
+    ]
+  }
+  {
+    service: 'Microsoft.Web'
+    locations: [
+      '*'
+    ]
+  }
+]
 
 /*
 ------------------------------------------------------------------------------
@@ -42,7 +99,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-07-01' = {
           addressPrefix: public_subnet_mask
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
-          serviceEndpoints: []
+          serviceEndpoints: all_service_endpoints
           delegations: []
         }
       }
@@ -52,63 +109,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-07-01' = {
           addressPrefix: private_subnet_mask
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
-          serviceEndpoints: [
-            {
-              service: 'Microsoft.AzureActiveDirectory'
-              locations: [
-                '*'
-              ]
-            }
-            {
-              service: 'Microsoft.AzureCosmosDB'
-              locations: [
-                '*'
-              ]
-            }
-            {
-              service: 'Microsoft.ContainerRegistry'
-              locations: [
-                '*'
-              ]
-            }
-            {
-              service: 'Microsoft.EventHub'
-              locations: [
-                '*'
-              ]
-            }
-            {
-              service: 'Microsoft.KeyVault'
-              locations: [
-                '*'
-              ]
-            }
-            {
-              service: 'Microsoft.ServiceBus'
-              locations: [
-                '*'
-              ]
-            }
-            {
-              service: 'Microsoft.Sql'
-              locations: [
-                'westeurope'
-              ]
-            }
-            {
-              service: 'Microsoft.Storage'
-              locations: [
-                'westeurope'
-                'northeurope'
-              ]
-            }
-            {
-              service: 'Microsoft.Web'
-              locations: [
-                '*'
-              ]
-            }
-          ]
+          serviceEndpoints: all_service_endpoints
           delegations: [
             {
               name: 'aci'
@@ -120,7 +121,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-07-01' = {
         }
       }
     ]
-    virtualNetworkPeerings: []
     enableDdosProtection: false
   }
 }

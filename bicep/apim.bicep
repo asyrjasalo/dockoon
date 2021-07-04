@@ -13,13 +13,14 @@ param dns_zone_name string
 param uami_name string
 param tags object
 
-param apim_publisher_email string = 'devops@${dns_zone_name}'
-param apim_publisher_name string = dns_zone_name
 param apim_sku string = 'Developer'
 param apim_capacity int = 1
+param apim_publisher_email string = 'devops@${dns_zone_name}'
+param apim_publisher_name string = dns_zone_name
 param apim_gw_hostname string = 'api.${dns_zone_name}'
 param apim_portal_hostname string = 'portal.${dns_zone_name}'
 param apim_mgmt_hostname string = 'mgmt.${dns_zone_name}'
+param apim_network_type string = 'External'
 
 /*
 ------------------------------------------------------------------------------
@@ -46,8 +47,8 @@ resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' = {
     capacity: apim_capacity
   }
   properties: {
-    publisherEmail: apim_publisher_email
     publisherName: apim_publisher_name
+    publisherEmail: apim_publisher_email
     virtualNetworkConfiguration: {
       subnetResourceId: subnet_id
     }
@@ -78,9 +79,13 @@ resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' = {
       }
     ]
     customProperties: {
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls1': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10': 'False'
       'Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2': 'True'
     }
-    virtualNetworkType: 'External'
+    virtualNetworkType: apim_network_type
   }
   identity: {
     type: 'UserAssigned'
@@ -91,7 +96,7 @@ resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' = {
 }
 
 resource diag 'microsoft.insights/diagnosticSettings@2017-05-01-preview' = {
-  name: 'diag'
+  name: 'log-to-law'
   scope: apim
   properties: {
     logAnalyticsDestinationType: 'Dedicated'

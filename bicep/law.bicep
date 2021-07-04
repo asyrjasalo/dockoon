@@ -6,6 +6,7 @@ PARAMETERS
 
 param law_name string
 param tags object
+param retention_in_days int = 30
 
 /*
 ------------------------------------------------------------------------------
@@ -21,13 +22,7 @@ resource law 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
     sku: {
       name: 'PerGB2018'
     }
-    retentionInDays: 30
-    features: {
-      enableLogAccessUsingOnlyResourcePermissions: true
-    }
-    workspaceCapping: {
-      dailyQuotaGb: -1
-    }
+    retentionInDays: retention_in_days
     publicNetworkAccessForIngestion: 'Enabled'
     publicNetworkAccessForQuery: 'Enabled'
   }
