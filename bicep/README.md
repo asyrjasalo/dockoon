@@ -1,16 +1,16 @@
 # Running on Azure Container Instances behind API Management
 
-The instructions will create the following in your Azure subscription:
+This will create the following in your Azure subscription:
 
-- TLS certificates for HTTPS (automated renewal if not having one already)
-- Azure Container Instances (in private networking mode, in virtual network)
-- Storage Account for hosting API specs and to use as a container volume mount
-- Internet exposed API Management with AppInsights and Log Analytics Workspace
-- API Management API (HTTPS front) with the containerized app as the backend
+- Azure Container Instance for the app (in private mode/in a virtual network)
+- TLS certificates for HTTPS with automated renewal to a key vault
+- Public API Management service with Portal, AppInsights and Log Analytics
+- Storage Account for API specs and a share to use as a container volume mount
+- Authenticated HTTPS API from an OpenAPI spec, container app as the backend
 
 ## Local setup
 
-[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is assumed present and used to install or upgrade 
+[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is assumed present to install or upgrade 
 [bicep](https://github.com/Azure/bicep):
 
     az bicep install
@@ -21,7 +21,7 @@ The instructions will create the following in your Azure subscription:
 ### Domain name
 
 You must own a domain which is delegated to an existing public DNS zone in the same Azure subscription. Deployment will create DNS records in the zone for
-the Container Instance app (A to private IP) and API Management Gateway (CNAME).
+the Container Instance app (A record) and API Management endpoints (3 CNAMEs).
 
 ### Certificate
 
@@ -30,19 +30,23 @@ and in addition to have them renewed automatically every 90 days, deploy
 [keyvault-acmebot](https://github.com/shibayan/keyvault-acmebot) in the
 same Azure subscription.
 
-The deployment creates a separate resource group, including resources such as a
-consumption tier Function App. Also a key vault is created where 
-the certificates are uploaded after created or renewed.
+The deployment creates a resource group, a consumption tier Function App and also a key vault where the certificates are uploaded after created or renewed.
 
-Use `/add-certificate` to request a certificate. You can either create a
-wildcard certificate (such as `*.yourdomain.dev`, recommended) or create a cert
-including all the subdomains that API Management exposes (see `apim.bicep`).
+Proceed according to the steps in
+[getting started](https://github.com/shibayan/keyvault-acmebot#getting-started)
+and finally use `/add-certificate` endpoint (web UI) to request a certificate.
+You can either create a wildcard certificate (such as `*.yourdomain.dev`,
+which is recommended here) or create a certificate including all the three 
+subdomains that API Management exposes (see `apim.bicep` for them).
+
+After successful, the vault should have the certificate. Note the certificate
+name, key vault name and key vault resource group name as you need them below.
 
 ## Deploy to Azure
 
 Copy `test.env.example` to `test.env`, configure variables and export them:
 
-    source test.env
+    set -o allexport; source test.env; set +o allexport
 
 Create a target resource group for the deployment:
     
