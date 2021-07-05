@@ -1,4 +1,4 @@
-# Running on Azure Container Instances behind API Management Service
+# Running on Azure Container Instances behind API Management
 
 The instructions will create the following in your Azure subscription:
 
