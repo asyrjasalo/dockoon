@@ -1,6 +1,6 @@
-# Running on Azure Container Instances with API Management as front
+# Running on Azure Container Instances behind API Management Service
 
-The following are created in your Azure subscription:
+The instructions will create the following in your Azure subscription:
 
 - TLS certificates for HTTPS (automated renewal if not having one already)
 - Azure Container Instances (in private networking mode, in virtual network)
@@ -75,6 +75,8 @@ to get the container status from 'waiting' to 'running' and also to get
 the API deployment to succeed.
 
 ## API management
+
+This chapter briefly summarizes some good operational practices (ApiOps).
 
 ### Developer portal
 
