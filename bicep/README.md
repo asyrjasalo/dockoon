@@ -83,7 +83,7 @@ e.g. via Azure portal: API Management -> Portal Overview -> Publish.
 
 ## Update API only
 
-You can (re-)deploy an API based on the latest API specification available:
+Redeploy API in APIM based on the latest OpenAPI specification available:
 
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
@@ -102,19 +102,24 @@ To get a subscription key for the API, sign up via your API Management
 developer portal. Portal signed up user is automatically placed in the group
 'Developers', thus granting access (and a subscription key) to the product.
 
-### Bicep parameters
+### Parameters
 
-If you want to switch the latest deployed API revision to live manually, add 
+If you want to switch the latest API revision to live manually, add parameter
 `api_set_current=false`. By default, **the new revision is set as current**, 
-which may not be wanted in your production environment. Note that a new
-revision is created in the first place only if the API spec has been changed.
+which may not be wanted in production environment. Note that a new revision is 
+created in API Management only if the new API specification introduces changes.
 
 If you want to require **no authentication** for the particular API deployed, 
 add `api_require_auth=false`. Authentication is still required on the product 
-level for the other APIs assigned in the product.
+level for the other APIs that are possibly assigned in the product.
 
-If you want to require **no admin approval** when new users subscribe to the
-product, add `app_require_admin_approval=false`.
+If you want to require **no approval from Administrators** when new users
+subscribe to the product, add `app_require_admin_approval=false`.
 
-OpenAPI (3.x), Swagger (2.x) and WSDL API can be imported by API Management.
-If you want to deploy a SOAP API instead of REST, add `api_type=soap`.
+OpenAPI (3.x), Swagger (2.x) and WSDL specification files can be imported by
+API Management. If are deploying a SOAP API instead of REST, add 
+`api_type=soap` and `api_format=wadl-link-json`.
+
+The API display name is taken from the API spec and the product name is taken
+from `app_name`. You can optionally set parameters `app_description` and 
+`app_terms` for the product, and `api_description` for the API.

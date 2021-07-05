@@ -14,13 +14,6 @@ param app_terms string = ''
 param app_require_admin_approval bool = true
 
 // API
-param api_backend_url string
-param api_path string = app_name
-param api_description string = ' '
-param api_set_current bool = true
-param api_require_auth bool = true
-param api_type string = 'http'
-param api_spec_url string = 'https://petstore3.swagger.io/api/v3/openapi.json'
 @allowed([
   'openapi'
   'openapi+json'
@@ -33,6 +26,13 @@ param api_spec_url string = 'https://petstore3.swagger.io/api/v3/openapi.json'
   'wsdl-link'
 ])
 param api_format string = 'openapi+json-link'
+param api_spec_url string
+param api_backend_url string
+param api_path string = app_name
+param api_type string = 'http'
+param api_description string = ' '
+param api_set_current bool = true
+param api_require_auth bool = true
 
 /*
 ------------------------------------------------------------------------------
@@ -104,4 +104,3 @@ resource apiToProduct 'Microsoft.ApiManagement/service/products/apis@2020-06-01-
 OUTPUTS
 ------------------------------------------------------------------------------
 */
-

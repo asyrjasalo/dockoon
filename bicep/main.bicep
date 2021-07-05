@@ -179,8 +179,8 @@ module dns './dns.bicep' = {
     dns_record_name: dns_record_name
     aci_ip_address: aci_ip_address
     apim_gateway_domain: '${apim_name}.azure-api.net'
-    apim_portal_domain: '${apim_name}.portal.azure-api.net'
-    apim_mgmt_domain: '${apim_name}.mgmt.azure-api.net'
+    apim_portal_domain: '${apim_name}.developer.azure-api.net'
+    apim_mgmt_domain: '${apim_name}.management.azure-api.net'
   }
   scope: resourceGroup(dns_zone_rg_name)
 }
