@@ -4,8 +4,8 @@ The instructions will create the following in your Azure subscription:
 
 - TLS certificates for HTTPS (automated renewal if not having one already)
 - Azure Container Instances (in private networking mode, in virtual network)
-- Storage Account hosting a file share used as the container volume
-- Internet exposed API Management Gateway which logs to Log Analytics Workspace
+- Storage Account for hosting API specs and to use as a container volume mount
+- Internet exposed API Management with AppInsights and Log Analytics Workspace
 - API Management API (HTTPS front) with the containerized app as the backend
 
 ## Local setup
