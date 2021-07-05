@@ -1,4 +1,4 @@
-# Running on Azure Container Instances
+# Running on Azure Container Instances with API Management as front
 
 The following are created in your Azure subscription:
 
@@ -8,7 +8,7 @@ The following are created in your Azure subscription:
 - Internet exposed API Management Gateway which logs to Log Analytics Workspace
 - API Management API (HTTPS front) with the containerized app as the backend
 
-## Setup
+## Local setup
 
 [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is assumed present and used to install or upgrade 
 [bicep](https://github.com/Azure/bicep):
@@ -38,11 +38,7 @@ Use `/add-certificate` to request a certificate. You can either create a
 wildcard certificate (such as `*.yourdomain.dev`, recommended) or create a cert
 including all the subdomains that API Management exposes (see `apim.bicep`).
 
-## Deploy
-
-Login to Azure:
-
-    az login
+## Deploy to Azure
 
 Copy `test.env.example` to `test.env`, configure variables and export them:
 
@@ -78,7 +74,9 @@ Upload `apis.json` and `openapi.json` to the Storage Account container `apis`
 to get the container status from 'waiting' to 'running' and also to get
 the API deployment to succeed.
 
-### API developer portal
+## API management
+
+### Developer portal
 
 DNS records for API Gateway, Developer Portal (new version) and Management API 
 are created in the DNS zone and set as custom domains in APIM by deployment.
@@ -96,7 +94,7 @@ To get a subscription key for the API, sign up via your API Management
 developer portal. Portal signed up user is automatically placed in the group
 'Developers', thus granting access (and a subscription key) to the product.
 
-## Update single API
+## API development
 
 Redeploy API in APIM based on the latest OpenAPI specification available:
 
