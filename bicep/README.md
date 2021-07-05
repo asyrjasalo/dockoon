@@ -103,7 +103,7 @@ Redeploy API in APIM based on the latest OpenAPI specification available:
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --template-file ./api.bicep \
-        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-${AZ_APP}-apim" \
+        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
         -p app_name="$AZ_APP" \
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
         -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
@@ -133,3 +133,6 @@ API Management. If are deploying a SOAP API instead of REST, add
 It is possible to set `api_format` to `openapi-json`, `swagger-json` or `wsdl`
 if you want to read `api_spec` content directly as a parameter. This may or
 may not work well, depending on your shell's limitations.
+
+Similarly, you can use `api_policy_xml` to set the API level policy as XML.
+To pass an URL to XML file instead, set `api_policy_format=rawxml-link`.

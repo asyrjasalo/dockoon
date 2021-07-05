@@ -33,6 +33,24 @@ param api_type string = 'http'
 param api_description string = ' '
 param api_set_current bool = true
 param api_require_auth bool = true
+param api_policy_xml string = '''
+<policies>
+    <inbound>
+        <rate-limit calls="3" renewal-period="5" />
+        <base />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
+'''
+param api_policy_format string = 'rawxml'
 
 /*
 ------------------------------------------------------------------------------
@@ -41,16 +59,6 @@ VARIABLES
 */
 
 var subscriptions_per_user_per_product = 1 // set to null to disable
-
-/*
-------------------------------------------------------------------------------
-EXISTING_RESOURCES
-------------------------------------------------------------------------------
-*/
-
-resource apim 'Microsoft.ApiManagement/service@2020-12-01' existing = {
-  name: apim_name
-}
 
 /*
 ------------------------------------------------------------------------------
@@ -94,13 +102,16 @@ resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
   }
 }
 
+resource apiPolicy 'Microsoft.ApiManagement/service/apis/policies@2019-01-01' = {
+  parent: api
+  name: 'policy'
+  properties: {
+    value: api_policy_xml
+    format: api_policy_format
+  }
+}
+
 resource apiToProduct 'Microsoft.ApiManagement/service/products/apis@2020-06-01-preview' = {
   parent: product
   name: api_path
 }
-
-/*
-------------------------------------------------------------------------------
-OUTPUTS
-------------------------------------------------------------------------------
-*/

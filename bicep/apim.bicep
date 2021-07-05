@@ -18,10 +18,49 @@ param apim_sku string = 'Developer'
 param apim_capacity int = 1
 param apim_publisher_email string = 'devops@${dns_zone_name}'
 param apim_publisher_name string = dns_zone_name
-param apim_gw_hostname string = 'api.${dns_zone_name}'
-param apim_portal_hostname string = 'portal.${dns_zone_name}'
-param apim_mgmt_hostname string = 'mgmt.${dns_zone_name}'
 param apim_network_type string = 'External'
+param apim_gw_hostname string = 'api.${dns_zone_name}'
+param apim_portal_hostname string = 'www.${dns_zone_name}'
+param apim_mgmt_hostname string = 'mgmt.${dns_zone_name}'
+param apim_policy string = '''
+<!--
+    IMPORTANT:
+    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.
+    - Only the <forward-request> policy element can appear within the <backend> section element.
+    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.
+    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.
+    - To add a policy position the cursor at the desired insertion point and click on the round button associated with the policy.
+    - To remove a policy, delete the corresponding policy statement from the policy document.
+    - Policies are applied in the order of their appearance, from the top down.
+-->
+<policies>
+    <inbound>
+      <quota-by-key calls="1000"
+                    bandwidth="100000"
+                    renewal-period="86400"
+                    counter-key="@(context.Request.IpAddress)" />
+      <cors allow-credentials="true">
+            <allowed-origins>
+                <origin>https://{0}</origin>
+            </allowed-origins>
+            <allowed-methods preflight-result-max-age="300">
+                <method>*</method>
+            </allowed-methods>
+            <allowed-headers>
+                <header>*</header>
+            </allowed-headers>
+            <expose-headers>
+                <header>*</header>
+            </expose-headers>
+        </cors>
+    </inbound>
+    <backend>
+        <forward-request />
+    </backend>
+    <outbound />
+    <on-error />
+</policies>
+'''
 
 /*
 ------------------------------------------------------------------------------
@@ -100,9 +139,18 @@ resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' = {
   }
 }
 
-resource logger 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
-  name: ai.name
+resource policy 'Microsoft.ApiManagement/service/policies@2020-06-01-preview' = {
   parent: apim
+  name: 'policy'
+  properties: {
+    value: format(apim_policy, apim_portal_hostname)
+    format: 'rawxml'
+  }
+}
+
+resource logger 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
+  parent: apim
+  name: ai.name
   properties: {
     loggerType: 'applicationInsights'
     description: 'Logger resources to APIM'
@@ -114,8 +162,8 @@ resource logger 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
 }
 
 resource loggerAi 'Microsoft.ApiManagement/service/diagnostics@2020-06-01-preview' = {
-  name: 'applicationinsights'
   parent: apim
+  name: 'applicationinsights'
   properties: {
     loggerId: logger.id
     alwaysLog: 'allErrors'

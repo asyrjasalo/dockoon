@@ -13,7 +13,7 @@ param apim_mgmt_domain string
 
 param ttl_seconds int = 3600
 param apim_gateway_record_name string = 'api'
-param apim_portal_record_name string = 'portal'
+param apim_portal_record_name string = 'www'
 param api_mgmt_record_name string = 'mgmt'
 
 /*
