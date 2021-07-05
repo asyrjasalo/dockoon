@@ -26,18 +26,20 @@ param aci_container_command array = [
   'runner.sh'
   'start'
   '--data'
-  '/share/apis.json'
-  '-i'
+  'https://${sa_name}.blob.core.windows.net/apis/apis.json'
+  '--index'
   '0'
 ]
 
 /*
 ------------------------------------------------------------------------------
-VARIABLES
+EXISTING_RESOURCES
 ------------------------------------------------------------------------------
 */
 
-var sa_id = resourceId('Microsoft.Storage/storageAccounts', sa_name)
+resource sa 'Microsoft.Storage/storageAccounts@2021-02-01' existing = {
+  name: sa_name
+}
 
 /*
 ------------------------------------------------------------------------------
@@ -124,7 +126,7 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-03-01' = {
           shareName: 'share'
           readOnly: true
           storageAccountName: sa_name
-          storageAccountKey: listKeys(sa_id, '2019-06-01').keys[0].value
+          storageAccountKey: listKeys(sa.id, '2019-06-01').keys[0].value
         }
       }
     ]
@@ -132,6 +134,10 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-03-01' = {
       id: netp.id
     }
   }
+  dependsOn: [
+    sa
+    netp
+  ]
 }
 
 /*

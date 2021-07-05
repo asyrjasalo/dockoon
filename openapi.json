@@ -1,0 +1,102 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "dockoon", "version": "1.0.0" },
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": { "": { "schema": { "type": "string" }, "example": "" } }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": {}
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": {}
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true
+        }]
+      },
+      "put": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": {}
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true
+        }]
+      },
+      "patch": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": {}
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true
+        }]
+      },
+      "delete": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": {} },
+            "headers": {}
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true
+        }]
+      }
+    }
+  }
+}

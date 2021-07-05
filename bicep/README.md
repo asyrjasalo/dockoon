@@ -20,8 +20,8 @@ The following are created in your Azure subscription:
 
 ### Domain name
 
-You must own a domain which is delegated to an existing public DNS zone in the same Azure subscription. Deployment will create DNS records (A) in the zone for
-the Container Instance app (private IP) and API Management Gateway (public IP).
+You must own a domain which is delegated to an existing public DNS zone in the same Azure subscription. Deployment will create DNS records in the zone for
+the Container Instance app (A to private IP) and API Management Gateway (CNAME).
 
 ### Certificate
 
@@ -56,7 +56,10 @@ Create a target resource group for the deployment:
         --subscription "$AZ_SUBSCRIPTION_ID" \
         --tags app=$AZ_APP environment=$AZ_ENVIRONMENT owner=$AZ_OWNER
 
-Deploy (everything except DNS and key vault changes) to this resource group:
+Note that creating API Management service might take an hour, and that DNS and
+key vault specific *deployments* will be visible in their own resource groups.
+
+Deploy (everything except DNS and key vault changes) to the resource group:
 
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
@@ -71,12 +74,35 @@ Deploy (everything except DNS and key vault changes) to this resource group:
         -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
-Note 1) initially creating API Management service might take an hour and
-2) the DNS and the key vault specific *deployments* are visible in their
-own resource groups.
+Upload `apis.json` and `openapi.json` to the Stotrage Account container `apis`
+to get the container from 'waiting' to 'running' and get the API Management
+API created.
 
-Add your client IP as allowed in the Storage Account's Networking settings and
-upload `apis.json` to a File shared named `share` to get the container running.
+## Update API only
 
-Alternatively, you can configure the Docker start command in `aci.bicep`
-if you rather load the API definitions over HTTPS.
+You can (re-)deploy an API based on the latest API specification available:
+
+    az deployment group create \
+        --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+        --template-file ./api.bicep \
+        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-${AZ_APP}3-apim" \
+        -p app_name="$AZ_APP" \
+        -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
+        -p api_spec_url="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
+
+### Useful parameters
+
+If you want to switch the latest deployed API revision to live manually 
+add `api_set_current=false`. By default, the latest revision is set as current
+(which might not be suitable in your production environment). Note that a new
+revision is only created in the first if the API specification has changed.
+
+If you want to require **no authentication** for the particular API deployed, 
+add `api_require_auth=false`. Authentication is still required on the product 
+level for the other APIs assigned in the same product.
+
+If you want to require **no admin approval** when new users subscribe to the
+product, add `app_require_admin_approval=false`.
+
+OpenAPI (3.x), Swagger (2.x) and WSDL API can be imported by API Management.
+If you want to deploy a SOAP API instead of REST, add `api_type=soap`.

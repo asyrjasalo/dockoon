@@ -1,0 +1,107 @@
+/*
+------------------------------------------------------------------------------
+PARAMETERS
+------------------------------------------------------------------------------
+*/
+
+// APIM
+param apim_name string
+
+// Product
+param app_name string
+param app_description string = ' '
+param app_terms string = ''
+param app_require_admin_approval bool = true
+
+// API
+param api_backend_url string
+param api_path string = app_name
+param api_description string = ' '
+param api_set_current bool = true
+param api_require_auth bool = true
+param api_type string = 'http'
+param api_spec_url string = 'https://petstore3.swagger.io/api/v3/openapi.json'
+@allowed([
+  'openapi'
+  'openapi+json'
+  'openapi+json-link'
+  'swagger-json'
+  'swagger-link-json'
+  'wadl-link-json'
+  'wadl-xml'
+  'wsdl'
+  'wsdl-link'
+])
+param api_format string = 'openapi+json-link'
+
+/*
+------------------------------------------------------------------------------
+VARIABLES
+------------------------------------------------------------------------------
+*/
+
+var subscriptions_per_user_per_product = 1 // set to null to disable
+
+/*
+------------------------------------------------------------------------------
+EXISTING_RESOURCES
+------------------------------------------------------------------------------
+*/
+
+resource apim 'Microsoft.ApiManagement/service@2020-12-01' existing = {
+  name: apim_name
+}
+
+/*
+------------------------------------------------------------------------------
+RESOURCES
+------------------------------------------------------------------------------
+*/
+
+resource product 'Microsoft.ApiManagement/service/products@2020-06-01-preview' = {
+  name: '${apim_name}/${app_name}'
+  properties: {
+    displayName: app_name
+    description: app_description
+    terms: app_terms
+    subscriptionRequired: true
+    approvalRequired: app_require_admin_approval
+    subscriptionsLimit: subscriptions_per_user_per_product
+    state: 'published'
+  }
+}
+
+resource productGroups 'Microsoft.ApiManagement/service/products/groups@2020-06-01-preview' = {
+  parent: product
+  name: 'Developers'
+}
+
+resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
+  name: '${apim_name}/${api_path}'
+  properties: {
+    description: api_description
+    serviceUrl: api_backend_url
+    format: api_format
+    value: api_spec_url
+    path: api_path
+    type: api_type
+    apiType: api_type
+    subscriptionRequired: api_require_auth
+    isCurrent: api_set_current
+    protocols: [
+      'https'
+    ]
+  }
+}
+
+resource apiToProduct 'Microsoft.ApiManagement/service/products/apis@2020-06-01-preview' = {
+  parent: product
+  name: api_path
+}
+
+/*
+------------------------------------------------------------------------------
+OUTPUTS
+------------------------------------------------------------------------------
+*/
+

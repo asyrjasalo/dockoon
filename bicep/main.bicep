@@ -48,7 +48,7 @@ VARIABLES
 ------------------------------------------------------------------------------
 */
 
-param tags object = {
+var tags = {
   app: app
   environment: environment
   owner: owner
@@ -61,7 +61,7 @@ var aci_name = '${prefix}-${environment}-${app}-aci'
 var aci_nic_name = '${prefix}-${environment}-${app}-nic'
 var law_name = '${prefix}-${environment}-${app}-law'
 var ai_name = '${prefix}-${environment}-${app}-ai'
-var apim_name = '${prefix}-${environment}-${app}-apim'
+var apim_name = '${prefix}-${environment}-${app}3-apim'
 var dns_record_name = '${app}-${environment}'
 
 /*
@@ -89,7 +89,6 @@ module sa './sa.bicep' = {
   name: 'sa'
   params: {
     sa_name: sa_name
-    private_subnet_id: private_subnet_id
     tags: tags
   }
 }
@@ -171,8 +170,6 @@ module apim './apim.bicep' = {
   }
 }
 
-var apim_ip_address = apim.outputs.apiManagementVirtualIpAddress
-
 // DNS
 
 module dns './dns.bicep' = {
@@ -181,7 +178,20 @@ module dns './dns.bicep' = {
     dns_zone_name: dns_zone_name
     dns_record_name: dns_record_name
     aci_ip_address: aci_ip_address
-    apim_ip_address: apim_ip_address
+    apim_gateway_domain: '${apim_name}.azure-api.net'
+    apim_portal_domain: '${apim_name}.portal.azure-api.net'
   }
   scope: resourceGroup(dns_zone_rg_name)
+}
+
+// API in APIM
+
+module api './api.bicep' = {
+  name: 'api'
+  params: {
+    app_name: app
+    apim_name: apim_name
+    api_spec_url: 'https://${sa_name}.blob.core.windows.net/apis/openapi.json'
+    api_backend_url: 'http://${aci_ip_address}:8080'
+  }
 }

@@ -164,3 +164,5 @@ OUTPUTS
 */
 
 output apiManagementVirtualIpAddress string = apim.properties.publicIPAddresses[0]
+output apiManagementGatewayFQDN string = apim.properties.gatewayUrl
+output apiManagementPortalFQDN string = apim.properties.portalUrl

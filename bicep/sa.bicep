@@ -6,7 +6,6 @@ PARAMETERS
 
 param sa_name string
 param tags object
-param private_subnet_id string
 
 /*
 ------------------------------------------------------------------------------
@@ -33,18 +32,8 @@ resource sa 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   kind: 'StorageV2'
   properties: {
     minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: false
+    allowBlobPublicAccess: true
     allowSharedKeyAccess: true
-    networkAcls: {
-      bypass: 'AzureServices'
-      virtualNetworkRules: [
-        {
-          id: private_subnet_id
-          action: 'Allow'
-        }
-      ]
-      defaultAction: 'Deny'
-    }
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
   }
@@ -54,6 +43,16 @@ resource share 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-02-01
   name: '${sa_name}/default/${sa_fs_name}'
   properties: {
     shareQuota: 1
+  }
+  dependsOn: [
+    sa
+  ]
+}
+
+resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
+  name: '${sa_name}/default/apis'
+  properties: {
+    publicAccess: 'Container'
   }
   dependsOn: [
     sa
