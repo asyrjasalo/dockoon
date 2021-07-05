@@ -78,10 +78,25 @@ Upload `apis.json` and `openapi.json` to the Storage Account container `apis`
 to get the container status from 'waiting' to 'running' and also to get
 the API deployment to succeed.
 
-The developer portal must be explicitly published in the API Management.
-To do so via Azure portal, go to API Management -> Portal Overview -> Publish.
+### API developer portal
 
-## Update API only
+DNS records for API Gateway, Developer Portal (new version) and Management API 
+are created in the DNS zone and set as custom domains in APIM by deployment.
+
+The developer portal (as well as management API) must be explicitly published
+in the API Management. To publish Developer Portal via Azure portal,
+browser to API Management -> Portal Overview -> Publish.
+
+### API key
+
+The API is created in the product `app_name` (which is also created). An API
+Management default group named 'Developers' is assigned to the product.
+
+To get a subscription key for the API, sign up via your API Management
+developer portal. Portal signed up user is automatically placed in the group
+'Developers', thus granting access (and a subscription key) to the product.
+
+## Update single API
 
 Redeploy API in APIM based on the latest OpenAPI specification available:
 
@@ -92,15 +107,6 @@ Redeploy API in APIM based on the latest OpenAPI specification available:
         -p app_name="$AZ_APP" \
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
         -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
-
-### API key
-
-The API is created in the product `app_name` (which is also created). An API
-Management default group named 'Developers' is assigned to the product.
-
-To get a subscription key for the API, sign up via your API Management
-developer portal. Portal signed up user is automatically placed in the group
-'Developers', thus granting access (and a subscription key) to the product.
 
 ### Parameters
 
