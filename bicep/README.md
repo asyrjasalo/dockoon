@@ -78,6 +78,9 @@ Upload `apis.json` and `openapi.json` to the Stotrage Account container `apis`
 to get the container from 'waiting' to 'running' and get the API Management
 API created.
 
+The developer portal must be explicitly published in the new API Management,
+e.g. via Azure portal: API Management -> Portal Overview -> Publish.
+
 ## Update API only
 
 You can (re-)deploy an API based on the latest API specification available:
@@ -90,6 +93,8 @@ You can (re-)deploy an API based on the latest API specification available:
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
         -p api_spec_url="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
 
+### API key
+
 The API is created in the product `app_name` (which is also created). An API
 Management default group named 'Developers' is assigned to the product.
 
@@ -97,7 +102,7 @@ To get a subscription key for the API, sign up via your API Management
 developer portal. Portal signed up user is automatically placed in the group
 'Developers', thus granting access (and a subscription key) to the product.
 
-### Useful parameters
+### Bicep parameters
 
 If you want to switch the latest deployed API revision to live manually, add 
 `api_set_current=false`. By default, **the new revision is set as current**, 

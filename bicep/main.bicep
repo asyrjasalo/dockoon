@@ -61,7 +61,7 @@ var aci_name = '${prefix}-${environment}-${app}-aci'
 var aci_nic_name = '${prefix}-${environment}-${app}-nic'
 var law_name = '${prefix}-${environment}-${app}-law'
 var ai_name = '${prefix}-${environment}-${app}-ai'
-var apim_name = '${prefix}-${environment}-${app}3-apim'
+var apim_name = '${prefix}-${environment}-${app}-apim'
 var dns_record_name = '${app}-${environment}'
 
 /*
@@ -180,6 +180,7 @@ module dns './dns.bicep' = {
     aci_ip_address: aci_ip_address
     apim_gateway_domain: '${apim_name}.azure-api.net'
     apim_portal_domain: '${apim_name}.portal.azure-api.net'
+    apim_mgmt_domain: '${apim_name}.mgmt.azure-api.net'
   }
   scope: resourceGroup(dns_zone_rg_name)
 }

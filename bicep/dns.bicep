@@ -9,10 +9,12 @@ param dns_zone_name string
 param aci_ip_address string
 param apim_gateway_domain string
 param apim_portal_domain string
+param apim_mgmt_domain string
 
 param ttl_seconds int = 3600
 param apim_gateway_record_name string = 'api'
 param apim_portal_record_name string = 'portal'
+param api_mgmt_record_name string = 'mgmt'
 
 /*
 ------------------------------------------------------------------------------
@@ -48,6 +50,16 @@ resource portal 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
     TTL: ttl_seconds
     CNAMERecord: {
       cname: apim_portal_domain
+    }
+  }
+}
+
+resource mgmt 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
+  name: '${dns_zone_name}/${api_mgmt_record_name}'
+  properties: {
+    TTL: ttl_seconds
+    CNAMERecord: {
+      cname: apim_mgmt_domain
     }
   }
 }
