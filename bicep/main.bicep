@@ -192,7 +192,7 @@ module api './api.bicep' = {
   params: {
     app_name: app
     apim_name: apim_name
-    api_spec_url: 'https://${sa_name}.blob.core.windows.net/apis/openapi.json'
+    api_spec: 'https://${sa_name}.blob.core.windows.net/apis/openapi.json'
     api_backend_url: 'http://${aci_ip_address}:8080'
   }
 }

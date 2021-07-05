@@ -74,12 +74,12 @@ Deploy (everything except DNS and key vault changes) to the resource group:
         -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
-Upload `apis.json` and `openapi.json` to the Stotrage Account container `apis`
-to get the container from 'waiting' to 'running' and get the API Management
-API created.
+Upload `apis.json` and `openapi.json` to the Storage Account container `apis`
+to get the container status from 'waiting' to 'running' and also to get
+the API deployment to succeed.
 
-The developer portal must be explicitly published in the new API Management,
-e.g. via Azure portal: API Management -> Portal Overview -> Publish.
+The developer portal must be explicitly published in the API Management.
+To do so via Azure portal, go to API Management -> Portal Overview -> Publish.
 
 ## Update API only
 
@@ -91,7 +91,7 @@ Redeploy API in APIM based on the latest OpenAPI specification available:
         -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-${AZ_APP}-apim" \
         -p app_name="$AZ_APP" \
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
-        -p api_spec_url="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
+        -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
 
 ### API key
 
@@ -104,7 +104,11 @@ developer portal. Portal signed up user is automatically placed in the group
 
 ### Parameters
 
-If you want to switch the latest API revision to live manually, add parameter
+The API display name is taken from the API spec and the product name is taken
+from `app_name`. You can optionally configure parameters `app_description` and 
+`app_terms` for the product, and `api_description` for the API.
+
+If you want to switch the latest API revision live manually, add parameter
 `api_set_current=false`. By default, **the new revision is set as current**, 
 which may not be wanted in production environment. Note that a new revision is 
 created in API Management only if the new API specification introduces changes.
@@ -116,10 +120,10 @@ level for the other APIs that are possibly assigned in the product.
 If you want to require **no approval from Administrators** when new users
 subscribe to the product, add `app_require_admin_approval=false`.
 
-OpenAPI (3.x), Swagger (2.x) and WSDL specification files can be imported by
+OpenAPI (3.x), Swagger (2.x) and WSDL specification formats can be imported by
 API Management. If are deploying a SOAP API instead of REST, add 
-`api_type=soap` and `api_format=wadl-link-json`.
+`api_type=soap` and use `api_format=wsdl-link` with `api_spec` URL to the XML.
 
-The API display name is taken from the API spec and the product name is taken
-from `app_name`. You can optionally set parameters `app_description` and 
-`app_terms` for the product, and `api_description` for the API.
+It is possible to set `api_format` to `openapi-json`, `swagger-json` or `wsdl`
+if you want to read `api_spec` content directly as a parameter. This may or
+may not work well, depending on your shell's limitations.

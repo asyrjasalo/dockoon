@@ -26,7 +26,7 @@ param app_require_admin_approval bool = true
   'wsdl-link'
 ])
 param api_format string = 'openapi+json-link'
-param api_spec_url string
+param api_spec string
 param api_backend_url string
 param api_path string = app_name
 param api_type string = 'http'
@@ -82,7 +82,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
     description: api_description
     serviceUrl: api_backend_url
     format: api_format
-    value: api_spec_url
+    value: api_spec
     path: api_path
     type: api_type
     apiType: api_type
