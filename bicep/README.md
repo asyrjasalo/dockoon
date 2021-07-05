@@ -46,7 +46,7 @@ name, key vault name and key vault resource group name as you need them below.
 
 Copy `test.env.example` to `test.env`, configure variables and export them:
 
-    set -o allexport; source test.env; set +o allexport
+    set -a; source test.env; set +a
 
 Create a target resource group for the deployment:
     
@@ -55,9 +55,6 @@ Create a target resource group for the deployment:
         --location "$AZ_LOCATION" \
         --subscription "$AZ_SUBSCRIPTION_ID" \
         --tags app=$AZ_APP environment=$AZ_ENVIRONMENT owner=$AZ_OWNER
-
-Note that creating API Management service might take an hour, and that DNS and
-key vault specific *deployments* will be visible in their own resource groups.
 
 Deploy (everything except DNS and key vault changes) to the resource group:
 
@@ -74,13 +71,18 @@ Deploy (everything except DNS and key vault changes) to the resource group:
         -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
+Note that creating a new API Management service might take half an hour.
+
+Also note that the DNS and key vault specific *deployments* (= bicep modules)
+are created in their respective resource groups and thus are visible there.
+
 Upload `apis.json` and `openapi.json` to the Storage Account container `apis`
-to get the container status from 'waiting' to 'running' and also to get
-the API deployment to succeed.
+to get the container from 'waiting' to 'running' and also to get API deployment
+(`apim.bicep`) to fetch the API spec successfully over the wire.
 
 ## API management
 
-This chapter briefly summarizes some good operational practices (ApiOps).
+This chapter briefly summarizes some good operational practices.
 
 ### Developer portal
 
