@@ -85,21 +85,28 @@ You can (re-)deploy an API based on the latest API specification available:
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --template-file ./api.bicep \
-        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-${AZ_APP}3-apim" \
+        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-${AZ_APP}-apim" \
         -p app_name="$AZ_APP" \
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
         -p api_spec_url="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
 
+The API is created in the product `app_name` (which is also created). An API
+Management default group named 'Developers' is assigned to the product.
+
+To get a subscription key for the API, sign up via your API Management
+developer portal. Portal signed up user is automatically placed in the group
+'Developers', thus granting access (and a subscription key) to the product.
+
 ### Useful parameters
 
-If you want to switch the latest deployed API revision to live manually 
-add `api_set_current=false`. By default, the latest revision is set as current
-(which might not be suitable in your production environment). Note that a new
-revision is only created in the first if the API specification has changed.
+If you want to switch the latest deployed API revision to live manually, add 
+`api_set_current=false`. By default, **the new revision is set as current**, 
+which may not be wanted in your production environment. Note that a new
+revision is created in the first place only if the API spec has been changed.
 
 If you want to require **no authentication** for the particular API deployed, 
 add `api_require_auth=false`. Authentication is still required on the product 
-level for the other APIs assigned in the same product.
+level for the other APIs assigned in the product.
 
 If you want to require **no admin approval** when new users subscribe to the
 product, add `app_require_admin_approval=false`.
