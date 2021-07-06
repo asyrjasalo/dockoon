@@ -182,7 +182,7 @@ This may or may not work well, depending on your shell and the spec content.
 ### Policy
 
 API management policies can be set on service, product or API level.
-By default, rate-limit policy is created on the API level by `apis.json`.
+By default, rate-limit policy is created on the API level by `api.bicep`.
 
 You can set `api_policy_xml` to override the API level policy as XML content.
 To pass an URL to an XML file instead of the content, also set
