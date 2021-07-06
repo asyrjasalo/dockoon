@@ -21,8 +21,11 @@ Principles:
 
 ### Domain name
 
-You must own a domain which is delegated to an existing public DNS zone in the same Azure subscription. Deployment will create DNS records in the zone for
-the Container Instance app (A record) and API Management endpoints (3 CNAMEs).
+You must own a domain which is delegated to an existing public DNS zone in the same Azure subscription.
+
+ACI deployment will create DNS record (A) for the Container Instance app.
+Also 3 CNAME records for API Gateway, Developer Portal and Management API
+are created in the DNS zone and set as custom domains by APIM deployment.
 
 ### Certificate
 
@@ -107,9 +110,6 @@ This chapter briefly summarizes some good operational practices.
 
 ### Portal
 
-DNS records for API Gateway, Developer Portal (new version) and Management API 
-are created in the DNS zone and set as custom domains in APIM by deployment.
-
 The developer portal (as well as management API) must be explicitly published
 in the API Management. To publish Developer Portal via Azure portal,
 browser to API Management -> Portal Overview -> Publish.
@@ -169,7 +169,7 @@ level for the other APIs that are possibly assigned in the product.
 If you want to require **no approval from Administrators** when new users
 subscribe to the product, add `app_require_admin_approval=false`.
 
-### Spec and policy
+### Spec
 
 OpenAPI (3.x), Swagger (2.x) and WSDL specification formats can be imported by
 API Management. If are deploying a SOAP API instead of REST, add 
@@ -179,5 +179,11 @@ If you want to read `api_spec` content directly as a parameter,
 set `api_format` to `openapi-json`, `swagger-json` or `wsdl`.
 This may or may not work well, depending on your shell and the spec content.
 
-Similarly, you can use `api_policy_xml` to set the API level policy as XML.
-To pass an URL to XML file instead, set `api_policy_format=rawxml-link`.
+### Policy
+
+API management policies can be set on service, product or API level.
+By default, rate-limit policy is created on the API level by `apis.json`.
+
+You can set `api_policy_xml` to override the API level policy as XML content.
+To pass an URL to an XML file instead of the content, also set
+`api_policy_format=rawxml-link`.
