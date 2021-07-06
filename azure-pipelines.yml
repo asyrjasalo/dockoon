@@ -14,10 +14,10 @@ stages:
   displayName: Docker
   jobs:
   - job: build
-    displayName: Deploy to Azure
+    displayName: Build Docker image
     steps:
       - task: Bash@3
-        displayName: Build Docker image
+        displayName: Run build_and_test_image
         inputs:
           filePath: docker/build_and_test_image
 
