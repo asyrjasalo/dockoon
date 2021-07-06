@@ -9,7 +9,7 @@ variables:
 - name: serviceConnectionName
   value: azure
 - name: dockerRepositoryUrl
-  value: registry.hub.docker.com/asyrjasalo
+  value: index.docker.io/asyrjasalo
 
 stages:
 - stage: docker
