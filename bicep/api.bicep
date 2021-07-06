@@ -12,6 +12,7 @@ param app_name string
 param app_description string = ' '
 param app_terms string = ''
 param app_require_admin_approval bool = true
+param app_subscriptions_per_user int = 1 // null to disable
 
 // API
 @allowed([
@@ -52,14 +53,6 @@ param api_policy_format string = 'rawxml'
 
 /*
 ------------------------------------------------------------------------------
-VARIABLES
-------------------------------------------------------------------------------
-*/
-
-var subscriptions_per_user_per_product = 1 // set to null to disable
-
-/*
-------------------------------------------------------------------------------
 RESOURCES
 ------------------------------------------------------------------------------
 */
@@ -72,7 +65,7 @@ resource product 'Microsoft.ApiManagement/service/products@2020-06-01-preview' =
     terms: app_terms
     subscriptionRequired: true
     approvalRequired: app_require_admin_approval
-    subscriptionsLimit: subscriptions_per_user_per_product
+    subscriptionsLimit: app_subscriptions_per_user
     state: 'published'
   }
 }
