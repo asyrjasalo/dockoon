@@ -22,7 +22,7 @@ stages:
           filePath: docker/build_and_test_image
 
 - stage: release
-  displayName: Dockoon
+  displayName: Release Docker
   dependsOn: build
   jobs:
   - job: push
