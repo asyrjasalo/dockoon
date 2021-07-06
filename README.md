@@ -37,7 +37,7 @@ Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
 Pass variable `RUN_ARGS` to include additional `docker run` arguments:
 
-    RUN_ARGS="-p 4000:4000" \
+    RUN_ARGS="-d -p 4000:4000" \
       ./dockoon start --data apis.json --name jsonplaceholder --port 4000
 
 ## Cloud deployment

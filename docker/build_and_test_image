@@ -30,4 +30,5 @@ docker build \
 ### run ########################################################################
 
 BUILD_ARGS="--build-arg FROM_IMAGE=$IMAGE_NAME:$IMAGE_TAG" \
+RUN_ARGS="" \
   "$repo_root_path/dockoon" $RUN_CMD
