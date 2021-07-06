@@ -2,6 +2,8 @@
 
 [![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines)
 
+[![DockerHub pulls](https://img.shields.io/docker/pulls/asyrjasalo/mockoon)](https://hub.docker.com/r/asyrjasalo/mockoon)
+
 [The Docker images](https://hub.docker.com/r/asyrjasalo/mockoon) include:
 
 - Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`) base
