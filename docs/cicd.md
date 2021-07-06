@@ -11,7 +11,7 @@ Create the following service connections in your Azure DevOps project:
 
 Create variable group `prod.env` and define `bicep/prod.env` variables there
 
-![Azure DevOps Variable Group](zdo_variable_group.png)
+![Azure DevOps Variable Group](azdo_variable_group.png)
 
 Configure in `azure-pipelines.yml` variables for the service connections:
 - `azureServiceConnectionName`
