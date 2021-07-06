@@ -20,8 +20,6 @@ param app_require_admin_approval bool = true
   'openapi+json-link'
   'swagger-json'
   'swagger-link-json'
-  'wadl-link-json'
-  'wadl-xml'
   'wsdl'
   'wsdl-link'
 ])

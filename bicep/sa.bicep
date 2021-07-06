@@ -52,7 +52,7 @@ resource share 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-02-01
 resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
   name: '${sa_name}/default/apis'
   properties: {
-    publicAccess: 'Container'
+    publicAccess: 'Blob'
   }
   dependsOn: [
     sa

@@ -13,7 +13,7 @@ Principles:
 - PaaS over virtual machines, Kubernetes, ingresses and API gateway software
 - Use the cheapest option for running container workloads in a private network
 - On Azure, target full ARM compatibility without actually writing any JSON
-- Deployments ought not to have centralized state (e.g. Terraform and Pulumi)
+- Deployments ought not to have state management (e.g. Terraform and Pulumi)
 - Pure and simple env vars over `azuredeploy.parameters.json` and configs
 - Deploying a single API to APIM ought to be less than 100 lines of code
 
@@ -53,9 +53,9 @@ name, key vault name and key vault resource group name as you need them below.
 
 ## Deploy
 
-Copy `test.env.example` to `test.env`, configure variables and export them:
+Copy `prod.env.example` to `prod.env`, configure variables and export them:
 
-    set -a; source test.env; set +a
+    set -a; source prod.env; set +a
 
 Create a target resource group:
     
@@ -69,11 +69,11 @@ Create deployment in the resource group:
 
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
-        --template-file ./main.bicep \
+        --template-file main.bicep \
         -p prefix="$AZ_PREFIX" \
-        -p app="$AZ_APP" \
         -p environment="$AZ_ENVIRONMENT" \
-        -p owner="devops@$AZ_DNS_ZONE_NAME" \
+        -p app="$AZ_APP" \
+        -p owner="$AZ_OWNER" \
         -p dns_zone_name="$AZ_DNS_ZONE_NAME" \
         -p dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
         -p key_vault_name="$AZ_KEY_VAULT_NAME" \
@@ -81,12 +81,25 @@ Create deployment in the resource group:
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
 Note that creating a new API Management service might take half an hour.
-Upload `apis.json` and `openapi.json` to the Storage Account container `apis`
-to get the container from 'waiting' to 'running' and also to get API deployment
-(`apim.bicep`) to fetch the API spec successfully over the wire.
+Meanwhile, upload `apis.json` and `openapi.json` to the Storage Account:
 
-Also note that the DNS and key vault specific *deployments* (= bicep modules)
+    az storage file upload \
+        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --share-name share \
+        --source ../apis.json
+
+    az storage blob upload \
+        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --container-name apis \
+        --name openapi.json \
+        --file ../openapi.json
+
+Note that the DNS and key vault specific *deployments* (= bicep modules)
 are created in their respective resource groups and thus are visible there.
+
+To run the above steps with a single command:
+
+    ./deploy prod.env ../apis.json ../openapi.json
 
 ## API management
 
@@ -122,7 +135,7 @@ Redeploy API in APIM based on the latest OpenAPI specification available:
 
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
-        --template-file ./api.bicep \
+        --template-file api.bicep \
         -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
         -p app_name="$AZ_APP" \
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
@@ -154,9 +167,9 @@ OpenAPI (3.x), Swagger (2.x) and WSDL specification formats can be imported by
 API Management. If are deploying a SOAP API instead of REST, add 
 `api_type=soap` and use `api_format=wsdl-link` with `api_spec` URL to the XML.
 
-It is possible to set `api_format` to `openapi-json`, `swagger-json` or `wsdl`
-if you want to read `api_spec` content directly as a parameter. This may or
-may not work well, depending on your shell's limitations.
+If you want to read `api_spec` content directly as a parameter,
+set `api_format` to `openapi-json`, `swagger-json` or `wsdl`.
+This may or may not work well, depending on your shell and the spec content.
 
 Similarly, you can use `api_policy_xml` to set the API level policy as XML.
 To pass an URL to XML file instead, set `api_policy_format=rawxml-link`.

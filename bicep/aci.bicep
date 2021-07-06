@@ -26,7 +26,7 @@ param aci_container_command array = [
   'runner.sh'
   'start'
   '--data'
-  'https://${sa_name}.blob.core.windows.net/apis/apis.json'
+  '/share/apis.json'
   '--index'
   '0'
 ]
