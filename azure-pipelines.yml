@@ -23,7 +23,7 @@ stages:
 
 - stage: release
   displayName: Dockoon
-  dependsOn: Release Docker
+  dependsOn: build
   jobs:
   - job: push
     displayName: Release Docker image
