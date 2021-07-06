@@ -1,6 +1,6 @@
 # Running on Azure API Management and Container Instances
 
-This will create the following in your Azure subscription:
+We will create the following in your Azure subscription:
 
 - Azure Container Instance for the app (in private mode/in a virtual network)
 - TLS certificates for HTTPS with automated renewal to a key vault
@@ -16,14 +16,6 @@ Principles:
 - Deployments ought not to have centralized state (e.g. Terraform and Pulumi)
 - Pure and simple env vars over `azuredeploy.parameters.json` and configs
 - Deploying a single API to APIM ought to be less than 100 lines of code
-
-## Local setup
-
-[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is assumed present to install or upgrade 
-[bicep](https://github.com/Azure/bicep):
-
-    az bicep install
-    az bicep upgrade
 
 ## Prerequisites
 
@@ -51,7 +43,15 @@ subdomains that API Management exposes (see `apim.bicep` for them).
 After successful, the vault will have the certificate. Note the certificate
 name, key vault name and key vault resource group name as you need them below.
 
-## Deploy to Azure
+## Setup
+
+[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is assumed present to install or upgrade 
+[bicep](https://github.com/Azure/bicep):
+
+    az bicep install
+    az bicep upgrade
+
+## Deploy
 
 Copy `test.env.example` to `test.env`, configure variables and export them:
 
@@ -93,7 +93,7 @@ to get the container from 'waiting' to 'running' and also to get API deployment
 
 This chapter briefly summarizes some good operational practices.
 
-### Developer portal
+### Portal
 
 DNS records for API Gateway, Developer Portal (new version) and Management API 
 are created in the DNS zone and set as custom domains in APIM by deployment.
@@ -123,7 +123,7 @@ Redeploy API in APIM based on the latest OpenAPI specification available:
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
         -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
 
-### Parameters
+### Revisions
 
 The API display name is taken from the API spec and the product name is taken
 from `app_name`. You can optionally configure parameters `app_description` and 
@@ -134,12 +134,16 @@ If you want to switch the latest API revision live manually, add parameter
 which may not be wanted in production environment. Note that a new revision is 
 created in API Management only if the new API specification introduces changes.
 
+### Subscription
+
 If you want to require **no authentication** for the particular API deployed, 
 add `api_require_auth=false`. Authentication is still required on the product 
 level for the other APIs that are possibly assigned in the product.
 
 If you want to require **no approval from Administrators** when new users
 subscribe to the product, add `app_require_admin_approval=false`.
+
+### Spec and policy
 
 OpenAPI (3.x), Swagger (2.x) and WSDL specification formats can be imported by
 API Management. If are deploying a SOAP API instead of REST, add 
