@@ -141,7 +141,7 @@ Redeploy API in APIM based on the latest OpenAPI specification available:
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
         -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
 
-### Versions and revisions
+### Version
 
 The API display name is taken from the API spec and the product name is taken
 from `app_name`. You can optionally configure parameters `app_description` and 
@@ -150,10 +150,15 @@ from `app_name`. You can optionally configure parameters `app_description` and
 By default, API version set named 'v1' is created and the version is carried
 as part of the URL. To deploy a new API version, set e.g. `api_version=v2`.
 
+### Revision
+
+Revisions can be used within API version to implement canary-like deployment.
+Note that a new revision is created in API Management only if the new API 
+specification introduces changes.
+
 If you want to switch the latest API revision live manually, add parameter
 `api_set_current=false`. By default, **the new revision is set as current**, 
-which may not be wanted in production environment. Note that a new revision is 
-created in API Management only if the new API specification introduces changes.
+which may not be wanted in production environment. 
 
 ### Subscription
 

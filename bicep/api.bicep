@@ -17,7 +17,6 @@ param app_subscriptions_per_user int = 1 // null to disable
 // API
 param api_spec string
 param api_backend_url string
-
 @allowed([
   'openapi'
   'openapi+json'
@@ -28,13 +27,12 @@ param api_backend_url string
   'wsdl-link'
 ])
 param api_format string = 'openapi+json-link'
-
 param api_path string = app_name
 param api_type string = 'http'
+param api_version string = 'v1'
 param api_description string = ''
 param api_set_current bool = true
 param api_require_auth bool = true
-param api_version string = 'v1'
 param api_policy_xml string = '''
 <policies>
     <inbound>
