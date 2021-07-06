@@ -1,29 +1,22 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
-resources:
-- repo: self
-
+pool:
+  vmImage: ubuntu-latest
+  
 variables:
-  tag: '$(Build.BuildId)'
+- group: test
 
 stages:
-- stage: Build
-  displayName: Build image
+- stage: test
+  displayName: Test environment
   jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
+  - job: deploy
+    displayName: Deploy to Azure
     steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+      - script: |
+          ls -al
+          echo "$AZ_APP"
+        failOnStderr: true
+        displayName: Debug
+        workingDirectory: bicep
