@@ -14,43 +14,59 @@ stages:
   - job: deploy
     displayName: Deploy to Azure
     steps:
-      - script: |
-          az group create \
-            --name "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
-            --location "$AZ_LOCATION" \
-            --subscription "$AZ_SUBSCRIPTION_ID" \
-            --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
-        failOnStderr: true
-        displayName: Create target rg
-        workingDirectory: bicep
-      - script: |
-          az deployment group create \
-            --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
-            --template-file main.bicep \
-            -p prefix="$AZ_PREFIX" \
-            -p environment="$AZ_ENVIRONMENT" \
-            -p app="$AZ_APP" \
-            -p owner="$AZ_OWNER" \
-            -p dns_zone_name="$AZ_DNS_ZONE_NAME" \
-            -p dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
-            -p key_vault_name="$AZ_KEY_VAULT_NAME" \
-            -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
-            -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
-        failOnStderr: true
-        displayName: Create deployment in rg
-        workingDirectory: bicep
-      - script: |
-          az storage file upload \
-            --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-            --share-name share \
-            --source apis.json
-        failOnStderr: true
-        displayName: Upload apis.json
-      - script: |
-          az storage blob upload \
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'Azure'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az group create \
+              --name "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+              --location "$AZ_LOCATION" \
+              --subscription "$AZ_SUBSCRIPTION_ID" \
+              --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
+          workingDirectory: 'bicep'
+          failOnStandardError: true
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'Azure'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az deployment group create \
+              --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+              --template-file main.bicep \
+              -p prefix="$AZ_PREFIX" \
+              -p environment="$AZ_ENVIRONMENT" \
+              -p app="$AZ_APP" \
+              -p owner="$AZ_OWNER" \
+              -p dns_zone_name="$AZ_DNS_ZONE_NAME" \
+              -p dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
+              -p key_vault_name="$AZ_KEY_VAULT_NAME" \
+              -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
+              -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
+          workingDirectory: 'bicep'
+          failOnStandardError: true
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'Azure'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az storage file upload \
+              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+              --share-name share \
+              --source apis.json
+          failOnStandardError: true
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'Azure'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az storage blob upload \
               --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
               --container-name apis \
               --name openapi.json \
               --file openapi.json
-        failOnStderr: true
-        displayName: Upload openapi.json
+          failOnStandardError: true
