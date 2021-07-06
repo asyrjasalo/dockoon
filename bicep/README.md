@@ -8,6 +8,8 @@ We will create the following in your Azure subscription:
 - Storage Account for API specs and a share to use as a container volume mount
 - Authenticated HTTPS API from an OpenAPI spec, container app as the backend
 
+![Azure Architecture](../azure_architecture.png)
+
 Principles:
 
 - PaaS over virtual machines, Kubernetes, ingresses and API gateway software
