@@ -5,9 +5,11 @@ pool:
   vmImage: ubuntu-latest
   
 variables:
+- group: test
 - name: serviceConnectionName
   value: azure
-- group: test
+- name: dockerRepositoryUrl
+  value: registry.hub.docker.com/asyrjasalo
 
 stages:
 - stage: docker
@@ -29,7 +31,7 @@ stages:
         displayName: tag_and_push_image
         inputs:
           targetType: inline
-          script: REGISTRY_URL=registry.hub.docker.com docker/tag_and_push_image
+          script: REGISTRY_URL=$(dockerRepositoryUrl) docker/tag_and_push_image
 
 - stage: deploy
   displayName: Deploy to Azure
