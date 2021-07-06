@@ -19,7 +19,9 @@ stages:
       - task: Bash@3
         displayName: Run build_and_test_image
         inputs:
-          filePath: docker/build_and_test_image
+          filePath: 'docker/build_and_test_image'
+          noProfile: false
+          noRc: false
 
 - stage: test
   dependsOn: dev
