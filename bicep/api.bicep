@@ -9,12 +9,15 @@ param apim_name string
 
 // Product
 param app_name string
-param app_description string = ' '
+param app_description string = ''
 param app_terms string = ''
 param app_require_admin_approval bool = true
 param app_subscriptions_per_user int = 1 // null to disable
 
 // API
+param api_spec string
+param api_backend_url string
+
 @allowed([
   'openapi'
   'openapi+json'
@@ -25,13 +28,13 @@ param app_subscriptions_per_user int = 1 // null to disable
   'wsdl-link'
 ])
 param api_format string = 'openapi+json-link'
-param api_spec string
-param api_backend_url string
+
 param api_path string = app_name
 param api_type string = 'http'
-param api_description string = ' '
+param api_description string = ''
 param api_set_current bool = true
 param api_require_auth bool = true
+param api_version string = 'v1'
 param api_policy_xml string = '''
 <policies>
     <inbound>
@@ -75,6 +78,14 @@ resource productGroups 'Microsoft.ApiManagement/service/products/groups@2020-06-
   name: 'Developers'
 }
 
+resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2020-06-01-preview' = {
+  name: '${apim_name}/${api_path}'
+  properties: {
+    displayName: api_path
+    versioningScheme: 'Segment'
+  }
+}
+
 resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
   name: '${apim_name}/${api_path}'
   properties: {
@@ -87,6 +98,8 @@ resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
     apiType: api_type
     subscriptionRequired: api_require_auth
     isCurrent: api_set_current
+    apiVersionSetId: apiVersionSet.id
+    apiVersion: api_version
     protocols: [
       'https'
     ]
