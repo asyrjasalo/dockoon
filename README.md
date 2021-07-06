@@ -90,20 +90,22 @@ If Debian image was built instead, tag and push the image `mockoon:slimbuster`:
 
 [![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines)
 
-Steps to create `azure-pipelines.yml` in your own Azure DevOps project:
+### Recreate in Azure DevOps project
 
-1. Create the following service connections in the project:
-    - GitHub or other repository hosting service
-    - Docker Registry
-        - If you use DockerHub with MFA, create an access token and use it
-    - Azure Resource Manager
-        - Use automatically created service principal in the subscription scope
+Create the following service connections in the project:
+- GitHub or similar (created when pipeline is imported from the repo)
+- Docker registry
+    - If you use DockerHub with MFA, create an access token and use it
+- Azure Resource Manager
+    - Use the automatically created service principal in the subscription scope
+
 ![Azure DevOps Service Connections](docs/azdo_service_connections.png)
 
-2. Create variable group `prod.env` and define `bicep/prod.env` variables there:
+Create variable group `prod.env` and define `bicep/prod.env` variables there
+
 ![Azure DevOps Variable Group](docs/azdo_variable_group.png)
 
-3. Configure in `azure-pipelines.yml` variables for the service connections:
-    - `azureServiceConnectionName`
-    - `registryServiceConnectionName`
-    - `dockerRepositoryUrl`
+Configure in `azure-pipelines.yml` variables for the service connections:
+- `azureServiceConnectionName`
+- `registryServiceConnectionName`
+- `dockerRepositoryUrl`
