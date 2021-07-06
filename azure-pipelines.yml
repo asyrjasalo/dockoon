@@ -19,12 +19,10 @@ stages:
       - task: Bash@3
         displayName: Build Docker image
         inputs:
-          filePath: 'build_and_test_image'
-          workingDirectory: 'docker'
-          noProfile: false
-          noRc: false
+          filePath: docker/build_and_test_image
 
 - stage: test
+  dependsOn: dev
   displayName: Deploy to Azure
   jobs:
   - job: deploy
