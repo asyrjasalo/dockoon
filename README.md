@@ -42,9 +42,8 @@ Pass variable `RUN_ARGS` to include additional `docker run` arguments:
 
 ## Cloud deployment
 
-See `terraform/README.md` for deploying on Azure Container Instances
-behind an Application Gateway or `bicep/README.md` for deploying on ACI
-behind an API Management.
+See `bicep/README.md` for deploying on Azure Container Instances behind an API
+Management service.
 
 ## Contributing
 
