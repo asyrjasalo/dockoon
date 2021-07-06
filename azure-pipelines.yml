@@ -6,23 +6,17 @@ pool:
   
 variables:
 - group: test
-- name: serviceConnectionName
+- name: azureServiceConnectionName
   value: azure
+- name: registryServiceConnectionName
+  value: dockerhub
 - name: dockerRepositoryUrl
-  value: index.docker.io/asyrjasalo
+  value: docker.io/asyrjasalo
 
 stages:
 - stage: docker
   displayName: Release Docker image
   jobs:
-  - job: login
-    displayName: Login to registry
-    steps:
-      - task: Docker@2
-        displayName: docker login
-        inputs:
-          containerRegistry: dockerhub
-          command: login
   - job: alpine
     displayName: Release Alpine image
     steps:
@@ -32,6 +26,11 @@ stages:
           targetType: inline
           script: |
             docker/build_and_test_image
+      - task: Docker@2
+        displayName: docker login
+        inputs:
+          containerRegistry: $(registryServiceConnectionName)
+          command: login
       - task: Bash@3
         displayName: tag_and_push_image
         inputs:
@@ -49,6 +48,11 @@ stages:
           script: |
             IMAGE_KIND=slimbuster \
               docker/build_and_test_image
+      - task: Docker@2
+        displayName: docker login
+        inputs:
+          containerRegistry: dockerhub
+          command: login
       - task: Bash@3
         displayName: tag_and_push_image
         inputs:
@@ -67,7 +71,7 @@ stages:
       - task: AzureCLI@2
         displayName: Create target rg
         inputs:
-          azureSubscription: $(serviceConnectionName)
+          azureSubscription: $(azureServiceConnectionName)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -80,7 +84,7 @@ stages:
       - task: AzureCLI@2
         displayName: Create deployment in rg
         inputs:
-          azureSubscription: $(serviceConnectionName)
+          azureSubscription: $(azureServiceConnectionName)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -103,7 +107,7 @@ stages:
     - task: AzureCLI@2
       displayName: Upload apis.json
       inputs:
-        azureSubscription: $(serviceConnectionName)
+        azureSubscription: $(azureServiceConnectionName)
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
@@ -114,7 +118,7 @@ stages:
     - task: AzureCLI@2
       displayName: Upload openapi.json
       inputs:
-        azureSubscription: $(serviceConnectionName)
+        azureSubscription: $(azureServiceConnectionName)
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
