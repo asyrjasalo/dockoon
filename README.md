@@ -1,5 +1,7 @@
 # dockoon
 
+[![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines)
+
 [The Docker images](https://hub.docker.com/r/asyrjasalo/mockoon) include:
 
 - Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`) base
@@ -37,17 +39,27 @@ Pass variable `BUILD_ARGS` to include additional `docker build` arguments:
 
 Pass variable `RUN_ARGS` to include additional `docker run` arguments:
 
-    RUN_ARGS="-p 4000:4000" \
+    RUN_ARGS="-d -p 4000:4000" \
       ./dockoon start --data apis.json --name jsonplaceholder --port 4000
 
 ## Cloud deployment
 
-See `bicep/README.md` for deploying on Azure Container Instances behind an API
-Management service.
+See [bicep/README.md](bicep/README.md) for deploying to Azure Container
+Instances hosted behind an API Management service.
 
 ## Contributing
 
 On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
+
+### CI/CD
+
+See [docs/cicd.md](docs/cicd.md) for recreating
+[the Azure DevOps pipeline](https://dev.azure.com/asyrjasalo/dockoon/_build)
+in your project.
+
+The pipeline will implement the steps documented below (building and pushing
+the base images) as well as full cloud deployment to Azure documented in
+[bicep/README.md](bicep/README.md).
 
 ### Building a base image
 
@@ -55,8 +67,7 @@ Alpine Linux:
 
     docker/build_and_test_image
 
-If no [vulnerabilities are found](https://docs.docker.com/engine/scan/)
-in the built image, the container will run and output `mockoon-cli` version.
+If succeeded the container will run and output `mockoon-cli` version.
 
 Pass variable `BUILD_ARGS` to override the default `docker build` arguments.
 
@@ -86,3 +97,4 @@ If Debian image was built instead, tag and push the image `mockoon:slimbuster`:
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
       docker/tag_and_push_image
+
