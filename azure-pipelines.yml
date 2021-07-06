@@ -16,9 +16,9 @@ stages:
     steps:
       - task: AzureCLI@2
         inputs:
-          azureSubscription: 'Azure'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
+          azureSubscription: azure
+          scriptType: bash
+          scriptLocation: inlineScript
           inlineScript: |
             az group create \
               --name "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
@@ -29,9 +29,9 @@ stages:
           failOnStandardError: true
       - task: AzureCLI@2
         inputs:
-          azureSubscription: 'Azure'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
+          azureSubscription: azure
+          scriptType: bash
+          scriptLocation: inlineScript
           inlineScript: |
             az deployment group create \
               --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
@@ -49,9 +49,9 @@ stages:
           failOnStandardError: true
       - task: AzureCLI@2
         inputs:
-          azureSubscription: 'Azure'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
+          azureSubscription: azure
+          scriptType: bash
+          scriptLocation: inlineScript
           inlineScript: |
             az storage file upload \
               --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
@@ -60,9 +60,9 @@ stages:
           failOnStandardError: true
       - task: AzureCLI@2
         inputs:
-          azureSubscription: 'Azure'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
+          azureSubscription: azure
+          scriptType: bash
+          scriptLocation: inlineScript
           inlineScript: |
             az storage blob upload \
               --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
