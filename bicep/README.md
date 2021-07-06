@@ -152,13 +152,9 @@ as part of the URL. To deploy a new API version, set e.g. `api_version=v2`.
 
 ### Revision
 
-Revisions can be used within API version to implement canary-like deployment.
-Note that a new revision is created in API Management only if the new API 
-specification introduces changes.
-
-If you want to switch the latest API revision live manually, add parameter
-`api_set_current=false`. By default, **the new revision is set as current**, 
-which may not be wanted in production environment. 
+By default, **the new revision is set as live**, which may not always be
+desired in production. If you want to switch the deployed API revision live
+later, set `api_set_current=false` and switch canary to live whenever suitable.
 
 ### Subscription
 

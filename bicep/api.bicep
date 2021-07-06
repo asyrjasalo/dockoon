@@ -95,6 +95,8 @@ resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
     type: api_type
     apiType: api_type
     subscriptionRequired: api_require_auth
+    apiRevision: api_set_current ? '1' : '2'
+    apiRevisionDescription: api_set_current ? 'live' : 'canary'
     isCurrent: api_set_current
     apiVersionSetId: apiVersionSet.id
     apiVersion: api_version
