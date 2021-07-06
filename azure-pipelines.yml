@@ -10,23 +10,18 @@ variables:
 - group: test
 
 stages:
-- stage: build
-  displayName: Build Docker
+- stage: docker
+  displayName: Release Docker image
   jobs:
   - job: build
-    displayName: Build Docker image
+    displayName: Build and test image
     steps:
       - task: Bash@3
         displayName: build_and_test_image
         inputs:
           filePath: docker/build_and_test_image
-
-- stage: release
-  displayName: Release Docker
-  dependsOn: build
-  jobs:
   - job: push
-    displayName: Release Docker image
+    displayName: Tag and push image
     steps:
       - task: Bash@3
         displayName: tag_and_push_image
