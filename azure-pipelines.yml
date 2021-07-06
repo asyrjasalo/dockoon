@@ -10,6 +10,20 @@ variables:
 - group: test
 
 stages:
+- stage: dev
+  displayName: Build Docker
+  jobs:
+  - job: build
+    displayName: Deploy to Azure
+    steps:
+      - task: Bash@3
+        displayName: Build Docker image
+        inputs:
+          filePath: 'build_and_test_image'
+          workingDirectory: 'docker'
+          noProfile: false
+          noRc: false
+
 - stage: test
   displayName: Test environment
   jobs:
