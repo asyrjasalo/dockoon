@@ -55,8 +55,7 @@ Alpine Linux:
 
     docker/build_and_test_image
 
-If no [vulnerabilities are found](https://docs.docker.com/engine/scan/)
-in the built image, the container will run and output `mockoon-cli` version.
+If succeeded the container will run and output `mockoon-cli` version.
 
 Pass variable `BUILD_ARGS` to override the default `docker build` arguments.
 

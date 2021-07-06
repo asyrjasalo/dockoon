@@ -27,14 +27,6 @@ docker build \
   --tag "$IMAGE_NAME:$IMAGE_TAG" \
   "$BUILD_DIR"
 
-### scan #######################################################################
-
-docker scan \
-   --accept-license \
-   --exclude-base \
-   --file "$this_path/Dockerfile.$IMAGE_KIND" \
-   "$IMAGE_NAME:$IMAGE_TAG"
-
 ### run ########################################################################
 
 BUILD_ARGS="--build-arg FROM_IMAGE=$IMAGE_NAME:$IMAGE_TAG" \
