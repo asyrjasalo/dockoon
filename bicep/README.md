@@ -15,7 +15,7 @@ Principles:
 - On Azure, target full ARM compatibility without actually writing any JSON
 - Deployments ought not to have state management (e.g. Terraform and Pulumi)
 - Pure and simple env vars over `azuredeploy.parameters.json` and configs
-- Deploying a single API to APIM ought to be less than 100 lines of code
+- API deployment ought to be one command and not require more than Azure CLI
 
 ## Prerequisites
 
