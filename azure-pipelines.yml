@@ -10,7 +10,7 @@ variables:
 - group: test
 
 stages:
-- stage: dev
+- stage: dockoon
   displayName: Dockoon
   jobs:
   - job: build
@@ -21,12 +21,11 @@ stages:
         inputs:
           filePath: docker/build_and_test_image
 
-- stage: test
-  dependsOn: dev
-  displayName: Deploy to Azure
+- stage: bicep
+  dependsOn: dockoon
+  displayName: Bicep
   jobs:
   - job: deploy
-    displayName: deploy
     steps:
       - task: AzureCLI@2
         displayName: Create target rg
@@ -62,7 +61,6 @@ stages:
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
           workingDirectory: 'bicep'
   - job: api
-    displayName: Upload API files
     steps:
     - task: AzureCLI@2
       displayName: Upload apis.json
