@@ -85,3 +85,24 @@ If Debian image was built instead, tag and push the image `mockoon:slimbuster`:
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
       docker/tag_and_push_image
+
+## CI/CD
+
+[![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines)
+
+Recreating `azure-pipelines.yml` in your own Azure DevOps project:
+- Create a new project in Azure DevOps
+- Create the following service connections in the project:
+    - GitHub or other repository hosting service
+    - Docker Registry
+        - If you use DockerHub with MFA, create an access token and use it
+    - Azure Resource Manager
+        - Use automatically created service principal in the subscription scope
+- Create variable group `prod.env` and define `bicep/prod.env` variables there
+- Configure in `azure-pipelines.yml` variables for the service connections:
+    - `azureServiceConnectionName`
+    - `registryServiceConnectionName`
+    - `dockerRepositoryUrl`
+
+![Azure DevOps Service Connections](docs/azdo_service_connections.png)
+![Azure DevOps Variable Group](docs/azdo_variable_group.png)
