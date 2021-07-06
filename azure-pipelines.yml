@@ -13,26 +13,51 @@ variables:
 
 stages:
 - stage: docker
-  displayName: Deploy to DockerHub
+  displayName: Release Docker image
   jobs:
-  - job: scripts
-    displayName: Run docker scripts
+  - job: login
+    displayName: Login to registry
     steps:
-      - task: Bash@3
-        displayName: build_and_test_image
-        inputs:
-          filePath: docker/build_and_test_image
       - task: Docker@2
         displayName: docker login
         inputs:
           containerRegistry: dockerhub
           command: login
+  - job: alpine
+    displayName: Release Alpine image
+    steps:
+      - task: Bash@3
+        displayName: build_and_test_image
+        inputs:          
+          targetType: inline
+          script: |
+            docker/build_and_test_image
       - task: Bash@3
         displayName: tag_and_push_image
         inputs:
           targetType: inline
-          script: REGISTRY_URL=$(dockerRepositoryUrl) docker/tag_and_push_image
-
+          script: |
+            REGISTRY_URL=$(dockerRepositoryUrl) \
+              docker/tag_and_push_image
+  - job: debian
+    displayName: Release Debian Image
+    steps:
+      - task: Bash@3
+        displayName: build_and_test_image
+        inputs:
+          targetType: inline
+          script: |
+            IMAGE_KIND=slimbuster \
+              docker/build_and_test_image
+      - task: Bash@3
+        displayName: tag_and_push_image
+        inputs:
+          targetType: inline
+          script: |
+            IMAGE_KIND=slimbuster \
+            REGISTRY_URL=$(dockerRepositoryUrl) \
+              docker/tag_and_push_image
+    
 - stage: deploy
   displayName: Deploy to Azure
   jobs:
