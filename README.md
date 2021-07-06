@@ -53,7 +53,7 @@ On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
 
 ### CI/CD
 
-See [docs/cicd](docs/cicd.md) for recreating
+See [docs/cicd.md](docs/cicd.md) for recreating
 [the Azure DevOps pipeline](https://dev.azure.com/asyrjasalo/dockoon/_build)
 in your project.
 
