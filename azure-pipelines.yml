@@ -19,8 +19,7 @@ stages:
       - task: Bash@3
         displayName: build_and_test_image
         inputs:
-          filePath: build_and_test_image
-          workingDirectory: docker
+          filePath: docker/build_and_test_image
       - task: Docker@2
         inputs:
           containerRegistry: dockerhub
@@ -29,8 +28,7 @@ stages:
         displayName: tag_and_push_image
         inputs:
           targetType: inline
-          script: REGISTRY_URL=https://index.docker.io/v2 tag_and_push_image
-          workingDirectory: docker
+          script: REGISTRY_URL=https://index.docker.io/v2 docker/tag_and_push_image
 
 - stage: deploy
   displayName: Deploy to Azure
