@@ -5,13 +5,13 @@ pool:
   vmImage: ubuntu-latest
   
 variables:
-- group: test
+- group: prod.env
 - name: azureServiceConnectionName
   value: azure
 - name: registryServiceConnectionName
   value: dockerhub
 - name: dockerRepositoryUrl
-  value: docker.io/asyrjasalo
+  value: asyrjasalo
 
 stages:
 - stage: docker
