@@ -1,5 +1,7 @@
 # dockoon
 
+[![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines)
+
 [The Docker images](https://hub.docker.com/r/asyrjasalo/mockoon) include:
 
 - Alpine Linux (`mockoon:alpine`) or Debian Buster (`mockoon:slimbuster`) base
@@ -49,6 +51,12 @@ Management service.
 
 On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
 
+### CI/CD
+
+See [docs/cicd](docs/cicd.md) for recreating the pipeline in your own
+Azure DevOps project. The pipeline will implement the following steps
+as well as cloud deployment to Azure documented in [bicep/README.md].
+
 ### Building a base image
 
 Alpine Linux:
@@ -86,26 +94,3 @@ If Debian image was built instead, tag and push the image `mockoon:slimbuster`:
     IMAGE_KIND=slimbuster \
       docker/tag_and_push_image
 
-## CI/CD
-
-[![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines)
-
-### Recreate in Azure DevOps project
-
-Create the following service connections in the project:
-- GitHub or similar (created when pipeline is imported from the repo)
-- Docker registry
-    - If you use DockerHub with MFA, create an access token and use it
-- Azure Resource Manager
-    - Use the automatically created service principal in the subscription scope
-
-![Azure DevOps Service Connections](docs/azdo_service_connections.png)
-
-Create variable group `prod.env` and define `bicep/prod.env` variables there
-
-![Azure DevOps Variable Group](docs/azdo_variable_group.png)
-
-Configure in `azure-pipelines.yml` variables for the service connections:
-- `azureServiceConnectionName`
-- `registryServiceConnectionName`
-- `dockerRepositoryUrl`

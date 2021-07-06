@@ -61,7 +61,7 @@ var aci_name = '${prefix}-${environment}-${app}-aci'
 var aci_nic_name = '${prefix}-${environment}-${app}-nic'
 var law_name = '${prefix}-${environment}-${app}-law'
 var ai_name = '${prefix}-${environment}-${app}-ai'
-var apim_name = '${prefix}-${environment}-${app}3-apim'
+var apim_name = '${prefix}-${environment}-${app}-apim'
 var dns_record_name = '${app}-${environment}'
 
 /*
