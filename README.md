@@ -44,8 +44,8 @@ Pass variable `RUN_ARGS` to include additional `docker run` arguments:
 
 ## Cloud deployment
 
-See `bicep/README.md` for deploying on Azure Container Instances behind an API
-Management service.
+See [bicep/README.md](bicep/README.md) for deploying to Azure Container
+Instances hosted behind an API Management service.
 
 ## Contributing
 
@@ -53,9 +53,13 @@ On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
 
 ### CI/CD
 
-See [docs/cicd](docs/cicd.md) for recreating the pipeline in your own
-Azure DevOps project. The pipeline will implement the following steps
-as well as cloud deployment to Azure documented in [bicep/README.md].
+See [docs/cicd](docs/cicd.md) for recreating
+[the Azure DevOps pipeline](https://dev.azure.com/asyrjasalo/dockoon/_build)
+in your project.
+
+The pipeline will implement the steps documented below (building and pushing
+the base images) as well as full cloud deployment to Azure documented in
+[bicep/README.md](bicep/README.md).
 
 ### Building a base image
 
