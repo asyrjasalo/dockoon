@@ -5,6 +5,8 @@ pool:
   vmImage: ubuntu-latest
   
 variables:
+- name: serviceConnectionName
+  value: azure
 - group: test
 
 stages:
@@ -15,8 +17,9 @@ stages:
     displayName: Deploy to Azure
     steps:
       - task: AzureCLI@2
+        displayName: Create target rg
         inputs:
-          azureSubscription: azure
+          azureSubscription: $(serviceConnectionName)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -26,10 +29,10 @@ stages:
               --subscription "$AZ_SUBSCRIPTION_ID" \
               --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
           workingDirectory: 'bicep'
-          failOnStandardError: true
       - task: AzureCLI@2
+        displayName: Create deployment in rg
         inputs:
-          azureSubscription: azure
+          azureSubscription: $(serviceConnectionName)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -46,10 +49,10 @@ stages:
               -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
           workingDirectory: 'bicep'
-          failOnStandardError: true
       - task: AzureCLI@2
+        displayName: Upload apis.json
         inputs:
-          azureSubscription: azure
+          azureSubscription: $(serviceConnectionName)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -57,10 +60,10 @@ stages:
               --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
               --share-name share \
               --source apis.json
-          failOnStandardError: true
       - task: AzureCLI@2
+        displayName: Upload openapi.json
         inputs:
-          azureSubscription: azure
+          azureSubscription: $(serviceConnectionName)
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -69,4 +72,3 @@ stages:
               --container-name apis \
               --name openapi.json \
               --file openapi.json
-          failOnStandardError: true
