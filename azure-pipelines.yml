@@ -21,6 +21,7 @@ stages:
         inputs:
           filePath: docker/build_and_test_image
       - task: Docker@2
+        displayName: docker login
         inputs:
           containerRegistry: dockerhub
           command: login
@@ -28,12 +29,13 @@ stages:
         displayName: tag_and_push_image
         inputs:
           targetType: inline
-          script: REGISTRY_URL=https://index.docker.io/v2 docker/tag_and_push_image
+          script: REGISTRY_URL=registry.hub.docker.com docker/tag_and_push_image
 
 - stage: deploy
   displayName: Deploy to Azure
   jobs:
   - job: deploy_to_rg
+    displayName: Use Azure CLI with Bicep
     steps:
       - task: AzureCLI@2
         displayName: Create target rg
@@ -69,6 +71,7 @@ stages:
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
           workingDirectory: 'bicep'
   - job: upload_specs
+    displayName: Update Storage Account
     steps:
     - task: AzureCLI@2
       displayName: Upload apis.json
