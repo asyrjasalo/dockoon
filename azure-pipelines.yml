@@ -11,7 +11,7 @@ variables:
 
 stages:
 - stage: dev
-  displayName: Build Docker
+  displayName: Docker
   jobs:
   - job: build
     displayName: Deploy to Azure
@@ -25,10 +25,10 @@ stages:
           noRc: false
 
 - stage: test
-  displayName: Test environment
+  displayName: Deploy to Azure
   jobs:
   - job: deploy
-    displayName: Deploy to Azure
+    displayName: deploy
     steps:
       - task: AzureCLI@2
         displayName: Create target rg
@@ -63,26 +63,29 @@ stages:
               -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
           workingDirectory: 'bicep'
-      - task: AzureCLI@2
-        displayName: Upload apis.json
-        inputs:
-          azureSubscription: $(serviceConnectionName)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az storage file upload \
-              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-              --share-name share \
-              --source apis.json
-      - task: AzureCLI@2
-        displayName: Upload openapi.json
-        inputs:
-          azureSubscription: $(serviceConnectionName)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az storage blob upload \
-              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-              --container-name apis \
-              --name openapi.json \
-              --file openapi.json
+  - job: api
+    displayName: Upload API files
+    steps:
+    - task: AzureCLI@2
+      displayName: Upload apis.json
+      inputs:
+        azureSubscription: $(serviceConnectionName)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az storage file upload \
+            --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+            --share-name share \
+            --source apis.json
+    - task: AzureCLI@2
+      displayName: Upload openapi.json
+      inputs:
+        azureSubscription: $(serviceConnectionName)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az storage blob upload \
+            --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+            --container-name apis \
+            --name openapi.json \
+            --file openapi.json
