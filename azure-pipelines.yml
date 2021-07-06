@@ -11,17 +11,15 @@ variables:
 
 stages:
 - stage: dev
-  displayName: Docker
+  displayName: Dockoon
   jobs:
   - job: build
     displayName: Build Docker image
     steps:
       - task: Bash@3
-        displayName: Run build_and_test_image
+        displayName: build_and_test_image
         inputs:
-          filePath: 'docker/build_and_test_image'
-          noProfile: false
-          noRc: false
+          filePath: docker/build_and_test_image
 
 - stage: test
   dependsOn: dev
