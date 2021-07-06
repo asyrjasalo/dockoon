@@ -63,7 +63,7 @@ Create a target resource group:
         --name "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --location "$AZ_LOCATION" \
         --subscription "$AZ_SUBSCRIPTION_ID" \
-        --tags app=$AZ_APP environment=$AZ_ENVIRONMENT owner=$AZ_OWNER
+        --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
 
 Create deployment in the resource group:
 
