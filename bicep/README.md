@@ -152,9 +152,9 @@ as part of the URL. To deploy a new API version, set e.g. `api_version=v2`.
 
 ### Revision
 
-By default, **the new revision is set as live**, which may not always be
-desired in production. If you want to switch the deployed API revision live
-later, set `api_set_current=false` and switch canary to live whenever suitable.
+By default, **revision 1 is set as current**, which may not be desired in
+production. If you want to implement canary, create a new revision `2`, set 
+`api_set_current=false` and set revision `2` as current when suitable.
 
 ### Subscription
 
