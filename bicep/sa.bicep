@@ -58,3 +58,12 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
     sa
   ]
 }
+
+/*
+------------------------------------------------------------------------------
+OUTPUT
+------------------------------------------------------------------------------
+*/
+
+output fileEndpoint string = sa.properties.primaryEndpoints.file
+output blobEndpoint string = sa.properties.primaryEndpoints.blob
