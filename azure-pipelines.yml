@@ -11,18 +11,15 @@ variables:
 
 stages:
 - stage: docker
-  displayName: Release Docker image
+  displayName: Deploy to DockerHub
   jobs:
-  - job: build
-    displayName: Build and test image
+  - job: scripts
+    displayName: Run docker scripts
     steps:
       - task: Bash@3
         displayName: build_and_test_image
         inputs:
           filePath: docker/build_and_test_image
-  - job: push
-    displayName: Tag and push image
-    steps:
       - task: Bash@3
         displayName: tag_and_push_image
         inputs:
@@ -31,7 +28,7 @@ stages:
 - stage: deploy
   displayName: Deploy to Azure
   jobs:
-  - job: deployment
+  - job: deploy_to_rg
     steps:
       - task: AzureCLI@2
         displayName: Create target rg
@@ -66,7 +63,7 @@ stages:
               -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
           workingDirectory: 'bicep'
-  - job: specs
+  - job: upload_specs
     steps:
     - task: AzureCLI@2
       displayName: Upload apis.json
