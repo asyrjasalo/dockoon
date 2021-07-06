@@ -102,7 +102,7 @@ The developer portal (as well as management API) must be explicitly published
 in the API Management. To publish Developer Portal via Azure portal,
 browser to API Management -> Portal Overview -> Publish.
 
-### API key
+### Registration
 
 The API is created in the product `app_name` (which is also created). An API
 Management default group named 'Developers' is assigned to the product.
@@ -110,6 +110,12 @@ Management default group named 'Developers' is assigned to the product.
 To get a subscription key for the API, sign up via your API Management
 developer portal. Portal signed up user is automatically placed in the group
 'Developers', thus granting access (and a subscription key) to the product.
+
+### Logging
+
+100% of requests are logged into the Log Analytics Workspace regardless if
+particular API has logging enabled or not. Similarly Application Insight 
+metrics are stored in the workspace. You may adjust `retention_in_days`.
 
 ## API development
 
