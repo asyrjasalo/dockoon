@@ -1,4 +1,4 @@
-# Running on Azure Container Instances behind API Management
+# Running on Azure API Management and Container Instances
 
 This will create the following in your Azure subscription:
 
@@ -7,6 +7,15 @@ This will create the following in your Azure subscription:
 - Public API Management service with Portal, AppInsights and Log Analytics
 - Storage Account for API specs and a share to use as a container volume mount
 - Authenticated HTTPS API from an OpenAPI spec, container app as the backend
+
+Principles:
+
+- PaaS over virtual machines, Kubernetes, ingresses and API gateway software
+- Use the cheapest option for running container workloads in a private network
+- On Azure, target full ARM compatibility without actually writing any JSON
+- Deployments ought not to have centralized state (e.g. Terraform and Pulumi)
+- Pure and simple env vars over `azuredeploy.parameters.json` and configs
+- Deploying a single API to APIM ought to be less than 100 lines of code
 
 ## Local setup
 
@@ -39,7 +48,7 @@ You can either create a wildcard certificate (such as `*.yourdomain.dev`,
 which is recommended here) or create a certificate including all the three 
 subdomains that API Management exposes (see `apim.bicep` for them).
 
-After successful, the vault should have the certificate. Note the certificate
+After successful, the vault will have the certificate. Note the certificate
 name, key vault name and key vault resource group name as you need them below.
 
 ## Deploy to Azure
