@@ -1,7 +1,7 @@
 # Running on Azure Container Instances and App Gateway
 
-Note: This is not maintained over `../bicep/README.md` which allows running
-behind an API Management service.
+Note: This is not maintained over [../bicep/README.md](../bicep/README.md)
+which allows running behind an API Management service.
 
 ## Prerequisites
 

@@ -20,7 +20,7 @@ param apim_publisher_email string = 'devops@${dns_zone_name}'
 param apim_publisher_name string = dns_zone_name
 param apim_network_type string = 'External'
 param apim_gw_hostname string = 'api.${dns_zone_name}'
-param apim_portal_hostname string = 'www.${dns_zone_name}'
+param apim_portal_hostname string = 'portal.${dns_zone_name}'
 param apim_mgmt_hostname string = 'mgmt.${dns_zone_name}'
 param apim_policy string = '''
 <!--
