@@ -5,6 +5,8 @@ PARAMETERS
 */
 
 param apim_name string
+param apim_tier string
+param apim_units int
 param subnet_id string
 param law_id string
 param ai_name string
@@ -14,8 +16,6 @@ param dns_zone_name string
 param uami_name string
 param tags object
 
-param apim_sku string = 'Developer'
-param apim_capacity int = 1
 param apim_publisher_email string = 'devops@${dns_zone_name}'
 param apim_publisher_name string = dns_zone_name
 param apim_network_type string = 'External'
@@ -87,8 +87,8 @@ resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' = {
   location: resourceGroup().location
   tags: tags
   sku: {
-    name: apim_sku
-    capacity: apim_capacity
+    name: apim_tier
+    capacity: apim_units
   }
   properties: {
     publisherName: apim_publisher_name
