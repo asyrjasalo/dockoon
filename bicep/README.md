@@ -58,7 +58,10 @@ name, key vault name and key vault resource group name as you need them below.
 
 ## Deploy
 
-Copy `prod.env.example` to `prod.env`, configure variables.
+Copy `prod.env.example` to `prod.env` and configure variables.
+
+Note that DNS and key vault specific *deployments* (`dns.bicep` and `kv.bicep`)
+will be created in their own configured resource groups and thus visible there.
 
 ### Shortcut
 
@@ -116,10 +119,7 @@ Create deployment in the resource group:
         -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
-Note that creating a new API Management service might take half an hour.
-
-Note that the DNS and key vault specific *deployments* (= bicep modules)
-are created in their respective resource groups and thus are visible there.
+Note that initially creating an API Management service might take half an hour.
 
 ## API management
 
