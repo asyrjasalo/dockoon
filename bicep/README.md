@@ -58,7 +58,17 @@ name, key vault name and key vault resource group name as you need them below.
 
 ## Deploy
 
-Copy `prod.env.example` to `prod.env`, configure variables and export them:
+Copy `prod.env.example` to `prod.env`, configure variables.
+
+### Shortcut
+
+To get everything up(dated) with one command according to the steps below:
+
+    ./deploy prod.env ../apis.json ../openapi.json
+
+### Steps
+
+Export the variables:
 
     set -a; source prod.env; set +a
 
@@ -69,6 +79,27 @@ Create a target resource group:
         --location "$AZ_LOCATION" \
         --subscription "$AZ_SUBSCRIPTION_ID" \
         --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
+
+Create storage account for the API files:
+
+    az deployment group create \
+        --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+        --template-file sa.bicep \
+        -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
+
+Upload `apis.json` and `openapi.json` to the storage account:
+
+    az storage file upload \
+        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --share-name share \
+        --source ../apis.json
+
+    az storage blob upload \
+        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --container-name apis \
+        --name openapi.json \
+        --file ../openapi.json
 
 Create deployment in the resource group:
 
@@ -86,25 +117,9 @@ Create deployment in the resource group:
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
 Note that creating a new API Management service might take half an hour.
-Meanwhile, upload `apis.json` and `openapi.json` to the Storage Account:
-
-    az storage file upload \
-        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-        --share-name share \
-        --source ../apis.json
-
-    az storage blob upload \
-        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-        --container-name apis \
-        --name openapi.json \
-        --file ../openapi.json
 
 Note that the DNS and key vault specific *deployments* (= bicep modules)
 are created in their respective resource groups and thus are visible there.
-
-To run the above steps with a single command:
-
-    ./deploy prod.env ../apis.json ../openapi.json
 
 ## API management
 

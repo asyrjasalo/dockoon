@@ -60,12 +60,12 @@ stages:
             IMAGE_KIND=slimbuster \
             REGISTRY_URL=$(dockerRepositoryUrl) \
               docker/tag_and_push_image
-    
-- stage: deploy
+
+- stage: azure
   displayName: Deploy to Azure
   jobs:
-  - job: deploy_to_rg
-    displayName: Use Azure CLI with Bicep
+  - job: deploy
+    displayName: Run az commands
     steps:
       - task: AzureCLI@2
         displayName: Create target rg
@@ -80,6 +80,42 @@ stages:
               --subscription "$AZ_SUBSCRIPTION_ID" \
               --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
           workingDirectory: 'bicep'
+      - task: AzureCLI@2
+        displayName: Create storage account
+        inputs:
+          azureSubscription: $(azureServiceConnectionName)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az deployment group create \
+                --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+                --template-file sa.bicep \
+                -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+                -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
+          workingDirectory: 'bicep'
+      - task: AzureCLI@2
+        displayName: Upload apis.json
+        inputs:
+          azureSubscription: $(azureServiceConnectionName)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az storage file upload \
+              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+              --share-name share \
+              --source apis.json
+      - task: AzureCLI@2
+        displayName: Upload openapi.json
+        inputs:
+          azureSubscription: $(azureServiceConnectionName)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az storage blob upload \
+              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+              --container-name apis \
+              --name openapi.json \
+              --file openapi.json
       - task: AzureCLI@2
         displayName: Create deployment in rg
         inputs:
@@ -100,29 +136,3 @@ stages:
               -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
           workingDirectory: 'bicep'
-  - job: upload_specs
-    displayName: Update Storage Account
-    steps:
-    - task: AzureCLI@2
-      displayName: Upload apis.json
-      inputs:
-        azureSubscription: $(azureServiceConnectionName)
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az storage file upload \
-            --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-            --share-name share \
-            --source apis.json
-    - task: AzureCLI@2
-      displayName: Upload openapi.json
-      inputs:
-        azureSubscription: $(azureServiceConnectionName)
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az storage blob upload \
-            --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-            --container-name apis \
-            --name openapi.json \
-            --file openapi.json

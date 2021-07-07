@@ -19,19 +19,12 @@ az group create \
     --subscription "$AZ_SUBSCRIPTION_ID" \
     --tags app="$AZ_APP" environment="$AZ_ENVIRONMENT" owner="$AZ_OWNER"
 
-echo -e "\nCreating a deployment in the resource group"
+echo -e "\nCreating storage account for the API files"
 az deployment group create \
     --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
-    --template-file main.bicep \
-    -p prefix="$AZ_PREFIX" \
-    -p app="$AZ_APP" \
-    -p environment="$AZ_ENVIRONMENT" \
-    -p owner="$AZ_OWNER" \
-    -p dns_zone_name="$AZ_DNS_ZONE_NAME" \
-    -p dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
-    -p key_vault_name="$AZ_KEY_VAULT_NAME" \
-    -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
-    -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
+    --template-file sa.bicep \
+    -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+    -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
 
 echo -e "\nUploading to storage account file share"
 az storage file upload \
@@ -45,5 +38,19 @@ az storage blob upload \
     --container-name apis \
     --name openapi.json \
     --file "$3"
+
+echo -e "\nCreating a deployment in the resource group"
+az deployment group create \
+    --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+    --template-file main.bicep \
+    -p prefix="$AZ_PREFIX" \
+    -p app="$AZ_APP" \
+    -p environment="$AZ_ENVIRONMENT" \
+    -p owner="$AZ_OWNER" \
+    -p dns_zone_name="$AZ_DNS_ZONE_NAME" \
+    -p dns_zone_rg_name="$AZ_DNS_ZONE_RG_NAME" \
+    -p key_vault_name="$AZ_KEY_VAULT_NAME" \
+    -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
+    -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
 echo -e "\n✅ Successfully finished."
