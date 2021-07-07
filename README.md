@@ -53,12 +53,9 @@ On Git commit, hooks in `.pre-commit-config.yaml` will be installed and run.
 
 ### CI/CD
 
-See [docs/cicd.md](docs/cicd.md) for recreating
-[the Azure DevOps pipeline](https://dev.azure.com/asyrjasalo/dockoon/_build)
-in your project.
-
-The pipeline will implement the steps documented below (building and pushing
-the base images) as well as full cloud deployment to Azure documented in
+The [Azure DevOps pipeline](https://dev.azure.com/asyrjasalo/dockoon/_build) 
+implements the steps documented below (building and pushing the base images)
+as well as cloud deployment to Azure documented in
 [bicep/README.md](bicep/README.md).
 
 ### Building a base image

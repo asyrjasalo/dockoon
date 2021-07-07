@@ -56,6 +56,10 @@ name, key vault name and key vault resource group name as you need them below.
     az bicep install
     az bicep upgrade
 
+If you do not have Bash available for your OS, you can clone this repo in
+Azure Cloud Shell and run the commands there. Alternatively, you can
+[create the CI/CD pipeline](../docs/cicd.md) in your Azure DevOps project.
+
 ## Deploy
 
 Copy `prod.env.example` to `prod.env` and configure variables.
