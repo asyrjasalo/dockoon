@@ -4,7 +4,7 @@ You can use `azure-pipelines.yml` (in the repo root) to create the
 CI/CD pipeline in your Azure DevOps project.
 
 After importing the pipeline from YML file, create the service connections:
-- GitHub - created automatically when pthe ipeline is imported from the repo
+- GitHub - created automatically when the pipeline is imported from the repo
 - Docker registry
     - If you use DockerHub with MFA, create an access token and use it
     - If you use your own private registry, create a dedicated user there 
