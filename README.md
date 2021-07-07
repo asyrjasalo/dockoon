@@ -1,6 +1,6 @@
 # dockoon
 
-[![Build Status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon?branchName=azure-pipelines)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9&branchName=azure-pipelines) [![DockerHub pulls](https://img.shields.io/docker/pulls/asyrjasalo/mockoon)](https://hub.docker.com/r/asyrjasalo/mockoon)
+[![Docker pulls](https://img.shields.io/docker/pulls/asyrjasalo/mockoon)](https://hub.docker.com/r/asyrjasalo/mockoon) [![Build status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9)
 
 [The Docker images](https://hub.docker.com/r/asyrjasalo/mockoon) include:
 
@@ -94,4 +94,3 @@ If Debian image was built instead, tag and push the image `mockoon:slimbuster`:
     REGISTRY_URL="$USER" \
     IMAGE_KIND=slimbuster \
       docker/tag_and_push_image
-

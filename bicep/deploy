@@ -26,18 +26,11 @@ az deployment group create \
     -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
     -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
 
-echo -e "\nUploading to storage account file share"
+echo -e "\nUploading APIs to storage account file share"
 az storage file upload \
     --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
     --share-name share \
     --source "$2"
-
-echo -e "\nUploading to storage account blob container"
-az storage blob upload \
-    --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-    --container-name apis \
-    --name openapi.json \
-    --file "$3"
 
 echo -e "\nCreating a deployment in the resource group"
 az deployment group create \
@@ -52,5 +45,21 @@ az deployment group create \
     -p key_vault_name="$AZ_KEY_VAULT_NAME" \
     -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
     -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
+
+echo -e "\nUploading API spec to storage account blob container"
+az storage blob upload \
+    --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+    --container-name apis \
+    --name openapi.json \
+    --file "$3"
+
+echo -e "\nCreating API deployment in the resource group"
+az deployment group create \
+    --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+    --template-file api.bicep \
+    -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
+    -p app_name="$AZ_APP" \
+    -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
+    -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
 
 echo -e "\n✅ Successfully finished."

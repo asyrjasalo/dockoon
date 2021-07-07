@@ -184,15 +184,3 @@ module dns './dns.bicep' = {
   }
   scope: resourceGroup(dns_zone_rg_name)
 }
-
-// API in APIM
-
-module api './api.bicep' = {
-  name: 'api'
-  params: {
-    app_name: app
-    apim_name: apim_name
-    api_spec: 'https://${sa_name}.blob.core.windows.net/apis/openapi.json'
-    api_backend_url: 'http://${app}-${environment}.${dns_zone_name}:8080'
-  }
-}

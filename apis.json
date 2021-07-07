@@ -206,6 +206,30 @@
                         "enabled": true,
                         "randomResponse": false,
                         "sequentialResponse": false
+                    },
+                    {
+                        "uuid": "",
+                        "documentation": "",
+                        "method": "get",
+                        "endpoint": "healthcheck",
+                        "responses": [
+                            {
+                                "uuid": "",
+                                "body": "{\n  \"caller_hostname\": {{hostname}}\",\n  \"caller_ip:\": \"{{ip}}\"\n}\n",
+                                "latency": 0,
+                                "statusCode": 200,
+                                "label": "",
+                                "headers": [],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            }
+                        ],
+                        "enabled": true,
+                        "randomResponse": false,
+                        "sequentialResponse": false
                     }
                 ],
                 "proxyMode": true,

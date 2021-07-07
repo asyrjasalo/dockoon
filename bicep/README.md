@@ -58,8 +58,8 @@ name, key vault name and key vault resource group name as you need them below.
 If you do not have Bash available for your OS, you can clone this repo in
 Azure Cloud Shell and run the commands there.
 
-Alternatively, you can [create the CI/CD pipeline](../docs/cicd.md)
-in your Azure DevOps project and run the pipeline stage 'Deploy to Azure'.
+Alternatively, you can [create the CI/CD pipeline](../docs/cicd.md) in your
+Azure DevOps project and run the pipeline.
 
 ## Deploy
 
@@ -98,18 +98,12 @@ Create storage account for the API files:
         -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
         -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
 
-Upload `apis.json` and `openapi.json` to the storage account:
+Upload `apis.json` to the storage account file share for the container:
 
     az storage file upload \
         --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
         --share-name share \
         --source ../apis.json
-
-    az storage blob upload \
-        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-        --container-name apis \
-        --name openapi.json \
-        --file ../openapi.json
 
 Create deployment in the resource group:
 
@@ -127,6 +121,29 @@ Create deployment in the resource group:
         -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
 
 Note that initially creating an API Management service might take half an hour.
+
+Upload `openapi.json` to the storage account blob container for the APIM:
+
+    az storage blob upload \
+        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --container-name apis \
+        --name openapi.json \
+        --file ../openapi.json
+
+Deploy (or update) API in APIM from the OpenAPI specification:
+
+    az deployment group create \
+        --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+        --template-file api.bicep \
+        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
+        -p app_name="$AZ_APP" \
+        -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
+        -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
+
+Verify the API responds 200 (OK) when called with API Management Gateway URL:
+
+    curl https://api.${AZ_DNS_ZONE_NAME}/dockoon/v1/users \
+        --header 'Ocp-Apim-Subscription-Key: {{subscription_key_for_app}}'
 
 ## API management
 
@@ -155,15 +172,9 @@ metrics are stored in the workspace. You may adjust `retention_in_days`.
 
 ## API development
 
-Redeploy API in APIM based on the latest OpenAPI specification available:
-
-    az deployment group create \
-        --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
-        --template-file api.bicep \
-        -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
-        -p app_name="$AZ_APP" \
-        -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
-        -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
+Deployment of `api.bicep` comes with sensible defaults, such as HTTPS only,
+but based on your purposes you may adjust parameters, most important of which
+are documented below.
 
 ### Version
 

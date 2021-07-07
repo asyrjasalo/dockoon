@@ -62,7 +62,7 @@ stages:
               docker/tag_and_push_image
 
 - stage: azure
-  displayName: Deploy to Azure
+  displayName: Deploy Azure resources
   jobs:
   - job: deploy
     displayName: Run az commands
@@ -105,18 +105,6 @@ stages:
               --share-name share \
               --source apis.json
       - task: AzureCLI@2
-        displayName: Upload openapi.json
-        inputs:
-          azureSubscription: $(azureServiceConnectionName)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az storage blob upload \
-              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
-              --container-name apis \
-              --name openapi.json \
-              --file openapi.json
-      - task: AzureCLI@2
         displayName: Create deployment in rg
         inputs:
           azureSubscription: $(azureServiceConnectionName)
@@ -135,4 +123,38 @@ stages:
               -p key_vault_name="$AZ_KEY_VAULT_NAME" \
               -p key_vault_rg_name="$AZ_KEY_VAULT_RG_NAME" \
               -p key_vault_cert_name="$AZ_KEY_VAULT_CERT_NAME"
+          workingDirectory: 'bicep'
+
+- stage: api
+  displayName: Deploy API in APIM
+  jobs:
+  - job: deploy
+    displayName: Run az commands
+    steps:
+      - task: AzureCLI@2
+        displayName: Upload openapi.json
+        inputs:
+          azureSubscription: $(azureServiceConnectionName)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az storage blob upload \
+              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+              --container-name apis \
+              --name openapi.json \
+              --file openapi.json
+      - task: AzureCLI@2
+        displayName: Update API deployment
+        inputs:
+          azureSubscription: $(azureServiceConnectionName)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az deployment group create \
+                --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+                --template-file api.bicep \
+                -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
+                -p app_name="$AZ_APP" \
+                -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
+                -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
           workingDirectory: 'bicep'
