@@ -24,4 +24,3 @@ Configure in `azure-pipelines.yml` variables for the service connection names:
 
 Configure in `azure-pipelines.yml` variable `dockerRepositoryUrl`. If using
 private registry over DockerHub, include the full URL to the repository.
- 

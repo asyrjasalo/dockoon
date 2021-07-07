@@ -2,11 +2,11 @@
 
 We will create the following in your Azure subscription:
 
-- Azure Container Instance for the app (in private mode/in a virtual network)
-- TLS certificates for HTTPS with automated renewal to a key vault
-- Public API Management service with Portal, AppInsights and Log Analytics
+- Container Instance for running e.g. [Mockoon](https://mockoon.com/) APIs
 - Storage Account for API specs and a share to use as a container volume mount
-- Authenticated HTTPS API from an OpenAPI spec, container app as the backend
+- Public API Management service incl. Portal, AppInsights and Log Analytics
+- Authenticated HTTPS API from OpenAPI spec, containerized API as the backend
+- TLS certificates for HTTPS with automated renewal to a key vault
 
 ![Azure Architecture](../docs/azure_architecture.png)
 
@@ -14,10 +14,9 @@ Principles:
 
 - PaaS over virtual machines, Kubernetes, ingresses and API gateway software
 - Use the cheapest option for running container workloads in a private network
-- On Azure, target full ARM compatibility without actually writing any JSON
+- On Azure, have full ARM compatibility without actually writing any JSON
 - Deployments ought not to have state management (e.g. Terraform and Pulumi)
-- Pure and simple env vars over `azuredeploy.parameters.json` and configs
-- API deployment ought to be one command and not require more than Azure CLI
+- Deployments ought to be **one command** not requiring more than Azure CLI
 
 ## Prerequisites
 
@@ -63,6 +62,8 @@ Alternatively, you can [create the CI/CD pipeline](../docs/cicd.md)
 in your Azure DevOps project and run the pipeline stage 'Deploy to Azure'.
 
 ## Deploy
+
+We will use pure env vars over `azuredeploy.parameters.json`, var files, etc.
 
 Copy `prod.env.example` to `prod.env` and configure variables.
 
