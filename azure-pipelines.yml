@@ -1,4 +1,4 @@
-trigger: none
+trigger: main
 
 pool:
   vmImage: ubuntu-latest
@@ -14,10 +14,10 @@ variables:
 
 stages:
 - stage: docker
-  displayName: Release Docker image
+  displayName: Release Docker images
   jobs:
   - job: alpine
-    displayName: Release Alpine image
+    displayName: Alpine image
     steps:
       - task: Bash@3
         displayName: build_and_test_image
@@ -38,7 +38,7 @@ stages:
             REGISTRY_URL=$(dockerRepositoryUrl) \
               docker/tag_and_push_image
   - job: debian
-    displayName: Release Debian Image
+    displayName: Debian image
     steps:
       - task: Bash@3
         displayName: build_and_test_image
@@ -65,7 +65,7 @@ stages:
   displayName: Deploy Azure resources
   jobs:
   - job: deploy
-    displayName: Run az commands
+    displayName: Run Azure CLI
     steps:
       - task: AzureCLI@2
         displayName: Create target rg
@@ -105,7 +105,7 @@ stages:
               --share-name share \
               --source apis.json
       - task: AzureCLI@2
-        displayName: Create deployment in rg
+        displayName: Create deployment
         inputs:
           azureSubscription: $(azureServiceConnectionName)
           scriptType: bash
@@ -126,7 +126,7 @@ stages:
           workingDirectory: 'bicep'
 
 - stage: api
-  displayName: Deploy API in APIM
+  displayName: Deploy API to APIM
   jobs:
   - job: deploy
     displayName: Run az commands
@@ -144,7 +144,7 @@ stages:
               --name openapi.json \
               --file openapi.json
       - task: AzureCLI@2
-        displayName: Update API deployment
+        displayName: Create API deployment
         inputs:
           azureSubscription: $(azureServiceConnectionName)
           scriptType: bash
