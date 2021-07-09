@@ -9,12 +9,23 @@ param uami_object_id string
 
 /*
 ------------------------------------------------------------------------------
+EXISTING RESOURCES
+------------------------------------------------------------------------------
+*/
+
+resource kv 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+  name: key_vault_name
+}
+
+/*
+------------------------------------------------------------------------------
 RESOURCES
 ------------------------------------------------------------------------------
 */
 
 resource ap 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
-  name: '${key_vault_name}/add'
+  parent: kv
+  name: 'add'
   properties: {
     accessPolicies: [
       {

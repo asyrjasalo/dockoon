@@ -54,12 +54,23 @@ param api_policy_format string = 'rawxml'
 
 /*
 ------------------------------------------------------------------------------
+EXISTING RESOURCES
+------------------------------------------------------------------------------
+*/
+
+resource apim 'Microsoft.ApiManagement/service@2020-06-01-preview' existing = {
+  name: apim_name
+}
+
+/*
+------------------------------------------------------------------------------
 RESOURCES
 ------------------------------------------------------------------------------
 */
 
 resource product 'Microsoft.ApiManagement/service/products@2020-06-01-preview' = {
-  name: '${apim_name}/${app_name}'
+  parent: apim
+  name: app_name
   properties: {
     displayName: app_name
     description: app_description
@@ -77,7 +88,8 @@ resource productGroups 'Microsoft.ApiManagement/service/products/groups@2020-06-
 }
 
 resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2020-06-01-preview' = {
-  name: '${apim_name}/${api_path}'
+  parent: apim
+  name: api_path
   properties: {
     displayName: api_path
     versioningScheme: 'Segment'
@@ -85,7 +97,8 @@ resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2020-06-0
 }
 
 resource api 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
-  name: '${apim_name}/${api_path}'
+  parent: apim
+  name: api_path
   properties: {
     description: api_description
     serviceUrl: api_backend_url
