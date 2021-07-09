@@ -18,12 +18,23 @@ param api_mgmt_record_name string = 'mgmt'
 
 /*
 ------------------------------------------------------------------------------
+EXISTING RESOURCES
+------------------------------------------------------------------------------
+*/
+
+resource dns_zone 'Microsoft.Network/dnsZones@2018-05-01' existing = {
+  name: dns_zone_name
+}
+
+/*
+------------------------------------------------------------------------------
 RESOURCES
 ------------------------------------------------------------------------------
 */
 
 resource aci 'Microsoft.Network/dnsZones/A@2018-05-01' = {
-  name: '${dns_zone_name}/${dns_record_name}'
+  parent: dns_zone
+  name: dns_record_name
   properties: {
     TTL: ttl_seconds
     ARecords: [
@@ -35,7 +46,8 @@ resource aci 'Microsoft.Network/dnsZones/A@2018-05-01' = {
 }
 
 resource apim 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${dns_zone_name}/${apim_gateway_record_name}'
+  parent: dns_zone
+  name: apim_gateway_record_name
   properties: {
     TTL: ttl_seconds
     CNAMERecord: {
@@ -45,7 +57,8 @@ resource apim 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
 }
 
 resource portal 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${dns_zone_name}/${apim_portal_record_name}'
+  parent: dns_zone
+  name: apim_portal_record_name
   properties: {
     TTL: ttl_seconds
     CNAMERecord: {
@@ -55,7 +68,8 @@ resource portal 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
 }
 
 resource mgmt 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
-  name: '${dns_zone_name}/${api_mgmt_record_name}'
+  parent: dns_zone
+  name: api_mgmt_record_name
   properties: {
     TTL: ttl_seconds
     CNAMERecord: {

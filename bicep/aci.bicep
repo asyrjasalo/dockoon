@@ -111,7 +111,7 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-03-01' = {
         azureFile: {
           shareName: 'share'
           readOnly: true
-          storageAccountName: sa_name
+          storageAccountName: sa.name
           storageAccountKey: listKeys(sa.id, '2019-06-01').keys[0].value
         }
       }
@@ -120,10 +120,6 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-03-01' = {
       id: netp.id
     }
   }
-  dependsOn: [
-    sa
-    netp
-  ]
 }
 
 /*

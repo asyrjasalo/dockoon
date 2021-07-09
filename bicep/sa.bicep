@@ -32,23 +32,17 @@ resource sa 'Microsoft.Storage/storageAccounts@2021-02-01' = {
 }
 
 resource share 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-02-01' = {
-  name: '${sa_name}/default/share'
+  name: '${sa.name}/default/share'
   properties: {
     shareQuota: 1
   }
-  dependsOn: [
-    sa
-  ]
 }
 
 resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
-  name: '${sa_name}/default/apis'
+  name: '${sa.name}/default/apis'
   properties: {
     publicAccess: 'Blob'
   }
-  dependsOn: [
-    sa
-  ]
 }
 
 /*
