@@ -5,31 +5,17 @@ PARAMETERS
 */
 
 param aci_name string
+param aci_container_image string
+param aci_container_command array
+param aci_container_envvars array
+param aci_container_port int
+param aci_container_restart_policy string
+param aci_vcpu_count int
+param aci_memory_gbs string
 param aci_nic_name string
 param aci_subnet_id string
 param sa_name string
 param tags object
-
-param aci_container_memory string = '1.5'
-param aci_container_vcpu int = 1
-param aci_container_image string = 'asyrjasalo/mockoon:alpine'
-param aci_container_restart_policy string = 'Always'
-param aci_container_port int = 8080
-param aci_container_envvars array = [
-  {
-    name: 'NODE_ENV'
-    value: 'production'
-  }
-]
-param aci_container_command array = [
-  'sh'
-  'runner.sh'
-  'start'
-  '--data'
-  '/share/apis.json'
-  '--index'
-  '0'
-]
 
 /*
 ------------------------------------------------------------------------------
@@ -93,8 +79,8 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-03-01' = {
           environmentVariables: aci_container_envvars
           resources: {
             requests: {
-              memoryInGB: aci_container_memory
-              cpu: aci_container_vcpu
+              cpu: aci_vcpu_count
+              memoryInGB: aci_memory_gbs
             }
           }
           volumeMounts: [

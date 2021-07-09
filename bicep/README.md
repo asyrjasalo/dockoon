@@ -1,5 +1,7 @@
 # Running on Azure Container Instances and API Management
 
+This `README.md` summarizes [the blog post from 2021-07-08](https://rise.raas.dev/apis-one-command/).
+
 We will create the following in your Azure subscription:
 
 - Container Instance for running e.g. [Mockoon](https://mockoon.com/) APIs

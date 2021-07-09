@@ -42,6 +42,59 @@ param key_vault_rg_name string
 @description('Certificate name for the wildcard cert stored in the key vault')
 param key_vault_cert_name string
 
+// Azure Container Instances defaults
+
+@description('Docker image to run (registry_ref/repository/image:label)')
+param aci_container_image string = 'asyrjasalo/mockoon:alpine'
+
+@description('Docker container command including entrypoint')
+param aci_container_command array = [
+  'sh'
+  'runner.sh'
+  'start'
+  '--data'
+  '/share/apis.json'
+  '--index'
+  '0'
+]
+
+@description('Docker container environment variables to set')
+param aci_container_envvars array = [
+  {
+    name: 'NODE_ENV'
+    value: 'production'
+  }
+]
+
+@description('Docker container port where server is run')
+param aci_container_port int = 8080
+
+@description('Docker container restart policy')
+@allowed([
+  'Always'
+  'Never'
+  'OnFailure'
+])
+param aci_container_restart_policy string = 'Always'
+
+@description('Azure Container Instances number of VCPUs')
+param aci_vcpu_count int = 1
+
+@description('Azure Container Instances memory in gigabytes')
+param aci_memory_gbs string = '1.5'
+
+// API Management defaults
+
+@description('Azure API Management tier')
+@allowed([
+  'Developer'
+  'Premium'
+])
+param apim_tier string = 'Developer'
+
+@description('Azure API Management number of units')
+param apim_units int = 1
+
 /*
 ------------------------------------------------------------------------------
 VARIABLES
@@ -99,6 +152,13 @@ module aci './aci.bicep' = {
   name: 'aci'
   params: {
     aci_name: aci_name
+    aci_container_image: aci_container_image
+    aci_container_command: aci_container_command
+    aci_container_envvars: aci_container_envvars
+    aci_container_port: aci_container_port
+    aci_container_restart_policy: aci_container_restart_policy
+    aci_vcpu_count: aci_vcpu_count
+    aci_memory_gbs: aci_memory_gbs
     aci_nic_name: aci_nic_name
     aci_subnet_id: private_subnet_id
     sa_name: sa_name
@@ -159,6 +219,8 @@ module apim './apim.bicep' = {
   name: 'apim'
   params: {
     apim_name: apim_name
+    apim_tier: apim_tier
+    apim_units: apim_units
     subnet_id: public_subnet_id
     law_id: law_id
     ai_name: ai_name
