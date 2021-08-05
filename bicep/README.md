@@ -85,7 +85,7 @@ Export the variables:
     set -a; source prod.env; set +a
 
 Create a target resource group:
-    
+
     az group create \
         --name "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --location "$AZ_LOCATION" \
@@ -96,6 +96,7 @@ Create storage account for the API files:
 
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+        --subscription "$AZ_SUBSCRIPTION_ID" \
         --template-file sa.bicep \
         -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
         -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
@@ -110,6 +111,7 @@ Upload `apis.json` to the storage account file share for the container:
 Create deployment in the resource group:
 
     az deployment group create \
+        --subscription "$AZ_SUBSCRIPTION_ID" \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --template-file main.bicep \
         -p prefix="$AZ_PREFIX" \
@@ -136,6 +138,7 @@ Deploy (or update) API in APIM from the OpenAPI specification:
 
     az deployment group create \
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+        --subscription "$AZ_SUBSCRIPTION_ID" \
         --template-file api.bicep \
         -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
         -p app_name="$AZ_APP" \

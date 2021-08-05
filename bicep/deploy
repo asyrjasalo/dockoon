@@ -25,6 +25,7 @@ az group create \
 echo -e "\nCreating storage account for the API files"
 az deployment group create \
     --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+    --subscription "$AZ_SUBSCRIPTION_ID" \
     --template-file "$this_path/sa.bicep" \
     -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
     -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
@@ -38,6 +39,7 @@ az storage file upload \
 echo -e "\nCreating a deployment in the resource group"
 az deployment group create \
     --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+    --subscription "$AZ_SUBSCRIPTION_ID" \
     --template-file "$this_path/main.bicep" \
     -p prefix="$AZ_PREFIX" \
     -p app="$AZ_APP" \
@@ -59,6 +61,7 @@ az storage blob upload \
 echo -e "\nCreating API deployment in the resource group"
 az deployment group create \
     --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
+    --subscription "$AZ_SUBSCRIPTION_ID" \
     --template-file "$this_path/api.bicep" \
     -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
     -p app_name="$AZ_APP" \
