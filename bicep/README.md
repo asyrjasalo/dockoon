@@ -98,13 +98,13 @@ Create storage account for the API files:
         --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
         --subscription "$AZ_SUBSCRIPTION_ID" \
         --template-file sa.bicep \
-        -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        -p sa_name="${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa" \
         -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
 
 Upload `apis.json` to the storage account file share for the container:
 
     az storage file upload \
-        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --account-name "${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa" \
         --share-name share \
         --source ../apis.json
 
@@ -129,7 +129,7 @@ Note that initially creating an API Management service might take half an hour.
 Upload `openapi.json` to the storage account blob container for the APIM:
 
     az storage blob upload \
-        --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+        --account-name "${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa" \
         --container-name apis \
         --name openapi.json \
         --file ../openapi.json
@@ -143,7 +143,7 @@ Deploy (or update) API in APIM from the OpenAPI specification:
         -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
         -p app_name="$AZ_APP" \
         -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
-        -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
+        -p api_spec="https://${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa.blob.core.windows.net/apis/openapi.json"
 
 Verify the API responds 200 (OK) when called with API Management Gateway URL:
 

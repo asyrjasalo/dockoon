@@ -1,6 +1,6 @@
 # dockoon
 
-[![Docker pulls](https://img.shields.io/docker/pulls/asyrjasalo/mockoon)](https://hub.docker.com/r/asyrjasalo/mockoon) [![Build status](https://dev.azure.com/asyrjasalo/dockoon/_apis/build/status/dockoon)](https://dev.azure.com/asyrjasalo/dockoon/_build/latest?definitionId=9)
+[![Docker pulls](https://img.shields.io/docker/pulls/asyrjasalo/mockoon)](https://hub.docker.com/r/asyrjasalo/mockoon)
 
 [The Docker images](https://hub.docker.com/r/asyrjasalo/mockoon) include:
 

@@ -93,7 +93,7 @@ stages:
             az deployment group create \
                 --resource-group "$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-rg" \
                 --template-file sa.bicep \
-                -p sa_name="${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+                -p sa_name="${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa" \
                 -p tags="{'app': '$AZ_APP', 'environment': '$AZ_ENVIRONMENT', 'owner': '$AZ_OWNER'}"
           workingDirectory: 'bicep'
       - task: AzureCLI@2
@@ -104,7 +104,7 @@ stages:
           scriptLocation: inlineScript
           inlineScript: |
             az storage file upload \
-              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+              --account-name "${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa" \
               --share-name share \
               --source apis.json
       - task: AzureCLI@2
@@ -142,7 +142,7 @@ stages:
           scriptLocation: inlineScript
           inlineScript: |
             az storage blob upload \
-              --account-name "${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa" \
+              --account-name "${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa" \
               --container-name apis \
               --name openapi.json \
               --file openapi.json
@@ -159,5 +159,5 @@ stages:
                 -p apim_name="$AZ_PREFIX-$AZ_ENVIRONMENT-$AZ_APP-apim" \
                 -p app_name="$AZ_APP" \
                 -p api_backend_url="http://$AZ_APP-$AZ_ENVIRONMENT.$AZ_DNS_ZONE_NAME:8080" \
-                -p api_spec="https://${AZ_PREFIX}${AZ_ENVIRONMENT}${AZ_APP}sa.blob.core.windows.net/apis/openapi.json"
+                -p api_spec="https://${AZ_PREFIX//-/}${AZ_ENVIRONMENT//-/}${AZ_APP//-/}sa.blob.core.windows.net/apis/openapi.json"
           workingDirectory: 'bicep'
