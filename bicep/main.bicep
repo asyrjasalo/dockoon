@@ -109,7 +109,7 @@ var tags = {
 
 var uami_name = '${prefix}-${environment}-${app}-uami'
 var vnet_name = '${prefix}-${environment}-${app}-vnet'
-var sa_name = '${prefix}${environment}${app}sa'
+var sa_name = replace('${prefix}${environment}${app}sa', '-', '')
 var aci_name = '${prefix}-${environment}-${app}-aci'
 var aci_nic_name = '${prefix}-${environment}-${app}-nic'
 var law_name = '${prefix}-${environment}-${app}-law'
